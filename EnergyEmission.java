@@ -25,7 +25,7 @@ public class EnergyEmission extends EmissionSource {
     public EnergyEmission(String sourceID, String category, String date, String userName,
                           double kWhUsed, String energySource) {
         super(sourceID, category, date, userName);
-        this.kWhUsed = kWhUsed;
+        this.kWhUsed = Math.max(0, kWhUsed);
         this.energySource = energySource.toLowerCase();
     }
 
@@ -39,9 +39,11 @@ public class EnergyEmission extends EmissionSource {
     @Override
     public double calculateEmission() {
         /** Emission factor in kg CO₂ per kWh */
-        double emissionFactor;
-        
-        if (this.energySource.equals("grid")) {
+        double emissionFactor=0.0;
+
+        if (this.energySource.equals(null)) {
+            emissionFactor = 0.37;
+        }else if (this.energySource.equals("grid")) {
             emissionFactor = 0.37;
 
         } else if (this.energySource.equals("solar")) {
@@ -65,8 +67,10 @@ public class EnergyEmission extends EmissionSource {
         } else if (this.energySource.equals("natural gas")) {
             emissionFactor = 0.309;
 
-        } else {
-            emissionFactor = 0.37; // Default to grid average
+        
+        }else {
+            System.out.println("Data unavailable for the energy source.");
+            
         }
 
         return kWhUsed * emissionFactor;
