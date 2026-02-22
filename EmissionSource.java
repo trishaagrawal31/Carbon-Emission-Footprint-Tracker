@@ -18,10 +18,10 @@ public abstract class EmissionSource {
      /**
     Constructs an EmissionSource object.
     
-    @param sourceID Unique identifier for the emission source
-    @param category Category of emission (e.g., Energy, Transport)
-    @param date Date of emission entry
-    @param userName Name of the user logging into the emission
+    @param sourceID ID for the emission source
+    @param category category of emission 
+    @param date date of emission entry
+    @param userName name of the user logging into the emission
      **/
 
     public EmissionSource(String sourceID, String category, String date, String userName){
