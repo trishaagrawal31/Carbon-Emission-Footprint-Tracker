@@ -34,9 +34,6 @@ public abstract class EmissionSource {
     /**
     Gets and sets the basic emission source properties:
     source ID, category, date, and user name.
-
-    These methods provide controlled access to the private
-    instance variables of the emission source.
     **/
 
     public String getSourceID(){return this.sourceID;}
