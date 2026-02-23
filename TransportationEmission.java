@@ -29,29 +29,23 @@ public class TransportationEmission extends EmissionSource {
         
 
     }
-    public double getDistance() {
-        return distance;
-    }
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-    public String getTransport() {
-        return transport;
-    }
-    public void setTransport(String transport) {
-        this.transport = transport;
-    }
+    public double getDistance() {return distance;}
+    public void setDistance(double distance) {this.distance = distance;}
+    public String getTransport() {return transport;}
+    public void setTransport(String transport) {this.transport = transport;}
 
     @Override
     /**
      * calculates the total emission caused based on each type of vehicle
      * Which form of transport has the smallest carbon footprint? - Our World in Data
+     * @return double total emission factor
      */
+
 
     public double calculateEmission(){
         double emissiona=0.0;
         if(this.transport.equals("car")){
-            emissiona=0.170; 
+            emissiona=0.170;
         }
         else if(this.transport.equals("bus")){
             emissiona=0.097;
@@ -61,17 +55,16 @@ public class TransportationEmission extends EmissionSource {
         }
         else if(this.transport.equals("cycle")){
             emissiona=0.00;
-        
         }
         else {
             System.out.println("please put something from our choices");
     }
-    return distance*emissiona;
+    double totalEmission = distance*emissiona;
+    return Math.round(totalEmission*100.0)/100.0;
     }
 
     @Override
     public String toString() {
-        return super.toString()+" | transport used "+ transport +" | distance travelled in km "+distance+" total emission is | "+calculateEmission() +" kg CO2/km";
-
+        return super.toString()+" | Transport used :"+ transport +" | Distance travelled in km: "+distance+" | total emission is: "+calculateEmission() +" kg CO2/km";
     }
 }
