@@ -36,16 +36,16 @@ public abstract class EmissionSource {
     source ID, category, date, and user name.
     **/
 
-    public String getSourceID(){return this.sourceID;}
+    public String getSourceID(){return sourceID;}
     public void setSourceID(String sourceID){this.sourceID = sourceID;}
 
-    public String getCategory(){return this.category;}
+    public String getCategory(){return category;}
     public void setCategory(String category){this.category = category;}
 
-    public String getDate(){return this.date;}
+    public String getDate(){return date;}
     public void setDate(String date){this.date = date;}
 
-    public String getUserName(){return this.userName;}
+    public String getUserName(){return userName;}
     public void setUserName(String userName){this.userName = userName;}
 
     /**
