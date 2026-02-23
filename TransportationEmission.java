@@ -1,9 +1,9 @@
 /**
  * Represents an Transport-based emission source.
  * This class calculates carbon emissions based on distance travelled and type of transport mode used
- * 
- * Emission factors are expressed in kg CO2 per kWh.
- * 
+ *
+ * Emission factors are expressed in kg CO2 per km
+ *
  * @author Aaliya
  */
 
@@ -12,7 +12,7 @@ public class TransportationEmission extends EmissionSource {
     private String transport;
 
     /**
-     * 
+     *
      * @param sourceID
      * @param category
      * @param date
@@ -44,22 +44,23 @@ public class TransportationEmission extends EmissionSource {
 
     @Override
     /**
-     * calculates the total emission caused based on each type of vehicle 
+     * calculates the total emission caused based on each type of vehicle
+     * Which form of transport has the smallest carbon footprint? - Our World in Data
      */
 
     public double calculateEmission(){
         double emissiona=0.0;
         if(this.transport.equals("car")){
-            emissiona=1.43; //random
+            emissiona=0.170; 
         }
         else if(this.transport.equals("bus")){
-            emissiona=2.65;
+            emissiona=0.097;
         }
         else if(this.transport.equals("train")){
-            emissiona=3;
+            emissiona=0.035;
         }
         else if(this.transport.equals("cycle")){
-            emissiona=0.0;
+            emissiona=0.00;
         
         }
         else {
@@ -70,7 +71,7 @@ public class TransportationEmission extends EmissionSource {
 
     @Override
     public String toString() {
-        return super.toString()+" | transport used "+ transport +" | distance travelled in km "+distance+" total emission is | "+calculateEmission();
+        return super.toString()+" | transport used "+ transport +" | distance travelled in km "+distance+" total emission is | "+calculateEmission() +" kg CO2/km";
 
     }
-}}
+}
