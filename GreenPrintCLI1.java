@@ -37,7 +37,7 @@ public class GreenPrintCLI1 {
                         break;
                 }
                 if(choice<1 || choice >3) {  
-                        System.out.println("Invalid choice! Please select 1-4.");
+                        System.out.println("Invalid choice! Please select 1-3.");
                         continue;
                 }
 
