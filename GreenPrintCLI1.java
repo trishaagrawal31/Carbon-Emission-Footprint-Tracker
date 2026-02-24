@@ -60,6 +60,7 @@ public class GreenPrintCLI1 {
                         if (transport.equals("car") || transport.equals("bus") || transport.equals("train") || transport.equals("cycle")){
                         System.out.print("Enter Distance (km): ");
                         double dist = scanner.nextDouble();
+                        scanner.nextLine();
                         if (dist<0){
                                 System.out.println("Distance cant be negative. Try again!");
                         }else{
@@ -78,6 +79,7 @@ public class GreenPrintCLI1 {
                         if(meal.equals("vegan") || meal.equals("vegetarian") || meal.equals("poultry") || meal.equals("beef")) {
                         System.out.print("enter Number of Meals: ");
                         int meals = scanner.nextInt();
+                        scanner.nextLine();
                         if(meals<0){
                                 System.out.println("No of meals cant be negative. Try again!");
                         } else{
@@ -97,6 +99,7 @@ public class GreenPrintCLI1 {
                         
                         System.out.print("Enter kWh used: ");
                         double kwh = scanner.nextDouble();
+                        scanner.nextLine();
                         if(kwh<0) {
                                 System.out.println("Energy usage cant be negative. Try again!");
                         }else{
