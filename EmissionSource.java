@@ -64,9 +64,9 @@ public abstract class EmissionSource {
     
     @Override
     public String toString(){
-        return "Source ID: " + this.sourceID + 
-        " Category: " + this.category + " Date: " 
-        + this.date + " UserName: " + this.userName;
+        return this.sourceID + " | "
+         + this.category + " | " 
+        + this.date + " | " + this.userName;
     }
     
 }

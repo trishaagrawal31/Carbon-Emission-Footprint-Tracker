@@ -25,17 +25,20 @@ public class GreenPrintCLI1 {
                         break; 
                 }
                 if(choice<1 || choice >3) {  //|| or operator
-                        System.out.println("Invalid choice! Please select 1-5.");
+                        System.out.println("Invalid choice! Please select 1-4.");
                         continue; 
                 }
 
                 
                 System.out.print("Enter Source ID:");
                 String id = scanner.nextLine();
+                if(id.isEmpty()) { System.out.println("ID cannot be empty!"); continue; }
                 System.out.print("Enter Date:");
                 String date = scanner.nextLine();
+                if(date.isEmpty()) { System.out.println("Date cannot be empty!"); continue; }
                 System.out.print("Enter User Name:");
                 String user = scanner.nextLine();
+                if(user.isEmpty()) { System.out.println("User name cannot be empty!"); continue; }
 
                 // ---TRANSPORTATION ---
                 if (choice==1){
@@ -52,7 +55,7 @@ public class GreenPrintCLI1 {
                                 System.out.println("Transportation added.");
                         }
                 } else{
-                        System.out.println("Error '" + transport +". Please put something in our system.");
+                        System.out.println("Error: '" + transport + "'. Please put something in our system.");
                 }
 
                 // --- FOOD ---
@@ -75,10 +78,10 @@ public class GreenPrintCLI1 {
 
                 // --- ENERGY ---
                 } else if(choice == 3){
-                        System.out.print("Enter Energy Source (Grid, Solar, Wind, Coal, Natural Gas): ");
+                        System.out.print("Enter Energy Source (Grid, Solar, Wind, Coal, Natural Gas, Nuclear, Diesel, Hydro): ");
                         String energy = scanner.nextLine().toLowerCase();
 
-                        if(energy.equals("grid") || energy.equals("solar") || energy.equals("wind") || energy.equals("coal") || energy.equals("natural gas")) {
+                        if(energy.equals("grid") || energy.equals("solar") || energy.equals("wind") || energy.equals("coal") || energy.equals("natural gas") || energy.equals("nuclear") || energy.equals("diesel") || energy.equals("hydro")) {
                         
                         System.out.print("Enter kWh used: ");
                         double kwh = scanner.nextDouble();
@@ -89,7 +92,7 @@ public class GreenPrintCLI1 {
                                 System.out.println("Energy added.");
                         }
                 }else{
-                        System.out.println("Error'" + energy + ". please put something in our system.");
+                        System.out.println("Error: '" + energy + "'. Please put something in our system.");
                 }
                 }
 

@@ -44,6 +44,7 @@ public class FoodEmission extends EmissionSource  {
 /*Calculates emissions based on  each type of meal and the number of meals */
 public double calculateEmission(){
     double emissions=0.0;
+
     if(this.mealType.equals("vegan")){
             emissions=2.90; //random
         }
@@ -55,16 +56,13 @@ public double calculateEmission(){
         }
         else if(this.mealType.equals("beef")){
             emissions=15.50;}
-        else{
-            System.out.println("Try again: Please pick from the following options Vegan | Vegetarian | Poultry | Beef |");
-
-        }
+       
         return emissions*numberOfMeals;
 }
 
 @Override
 public String toString(){
-    return super.toString()+ "| The meal Type: " + mealType + "| The number of meals: " + numberOfMeals + " | Total Food emissions: " + calculateEmission();
+    return super.toString()+ " | " + mealType + ", " + numberOfMeals + " meals | " + String.format("%.2f", calculateEmission()) + " kg CO2";
 }
 
 
