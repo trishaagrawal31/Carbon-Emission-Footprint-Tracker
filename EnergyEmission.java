@@ -23,7 +23,7 @@ public class EnergyEmission extends EmissionSource {
      * @param energySource Type of energy source used
      */
     public EnergyEmission(String sourceID, String category, String date, String userName,
-                          double kWhUsed, String energySource) {
+                            double kWhUsed, String energySource) {
         super(sourceID, category, date, userName);
         this.kWhUsed = Math.max(0, kWhUsed);
         this.energySource = energySource.toLowerCase();
