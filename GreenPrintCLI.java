@@ -40,7 +40,7 @@ public class GreenPrintCLI {
                 "E-001",
                 "Energy",
                 "2026-02-12",
-                "Bob",
+                "alice",
                 8.5,
                 "Grid"));
 
