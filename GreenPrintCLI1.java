@@ -1,13 +1,18 @@
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
+/**
+ * Interactive CLI for the GreenPrint carbon footprint tracking system.
+ * 
+ * This class provides a menu-driven interface that allows users to log their carbon emissions
+ * across three categories: Transportation, Food, and Energy. 
+ * @author Aaliya
+ */
 public class GreenPrintCLI1 {
         /**
          * The method asks user for sourceID, Date and username, and gives the list of emissions for the user to choose from,
          * the method then uses FootprintTracker.addEntry() and delivers an output.
          * @param args
-         *
-         * @author Aaliya
          */
         public static void main(String[] args) {
         Scanner scanner=new Scanner(System.in);
@@ -62,7 +67,7 @@ public class GreenPrintCLI1 {
                                 System.out.println("Transportation added.");
                         }
                 } else{
-                        System.out.println("Error '" + transport +". Please put something from our system.");
+                        System.out.println("Error: '" + transport +". Please put something from our system.");
                 }
 
                 // --- FOOD ---
