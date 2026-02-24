@@ -29,9 +29,27 @@ public class TransportationEmission extends EmissionSource {
         
 
     }
+    /**
+     * 
+     * @return double distance in km
+     */
     public double getDistance() {return distance;}
+    /**
+     * 
+     * @param distance
+     * @return void
+     */
     public void setDistance(double distance) {this.distance = distance;}
+    /**
+     * 
+     * @return String type of transport
+     */
     public String getTransport() {return transport;}
+    /**
+     * 
+     * @param transport
+     * @return void
+     */
     public void setTransport(String transport) {this.transport = transport;}
 
     @Override
@@ -64,6 +82,10 @@ public class TransportationEmission extends EmissionSource {
     }
 
     @Override
+    /**
+     * Returns a formatted string representation of the transport emission record.
+     * @return formatted emission details including calculated CO2
+     */
     public String toString() {
         return super.toString()+" | Transport used :"+ transport +" | Distance travelled in km: "+distance+" | total emission is: "+calculateEmission() +" kg CO2/km";
     }
