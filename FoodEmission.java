@@ -3,10 +3,10 @@
  * This class calculates carbon emissions based on meal type and number of meals consumed.
  *
  * Emission factors are expressed in kg CO2 per meal for different meal types:
- * - Vegan: 2.90 kg CO2
- * - Vegetarian: 3.80 kg CO2
- * - Poultry: 4.08 kg CO2
- * - Beef: 15.50 kg CO2
+ * - Vegan: 0.5 kg CO2
+ * - Vegetarian: 0.8 kg CO2
+ * - Poultry: 1.82 kg CO2
+ * - Beef: 3.3 kg CO2
  *
  * @author Sadaf
  */
@@ -77,13 +77,13 @@ public class FoodEmission extends EmissionSource {
         double emissions = 0.0;
 
         if (this.mealType.equals("vegan")) {
-            emissions = 2.90;
+            emissions = 0.50;
         } else if (this.mealType.equals("vegetarian")) {
-            emissions = 3.80;
+            emissions = 0.80;
         } else if (this.mealType.equals("poultry")) {
-            emissions = 4.08;
+            emissions = 1.82;
         } else if (this.mealType.equals("beef")) {
-            emissions = 15.50;
+            emissions =  3.3;
         }
         
         return emissions * numberOfMeals;
