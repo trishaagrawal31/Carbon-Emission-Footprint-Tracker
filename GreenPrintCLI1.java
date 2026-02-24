@@ -2,6 +2,13 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 public class GreenPrintCLI1 {
+        /**
+         * The method asks user for sourceID, Date and username, and gives the list of emissions for the user to choose from,
+         * the method then uses FootprintTracker.addEntry() and delivers an output.
+         * @param args
+         *
+         * @author Aaliya
+         */
         public static void main(String[] args) {
         Scanner scanner=new Scanner(System.in);
         FootprintTracker ft=new FootprintTracker("RIT GreenPrint 2026");
@@ -18,15 +25,15 @@ public class GreenPrintCLI1 {
                 System.out.print("Choose an option: ");
                 
                 int choice=scanner.nextInt();
-                scanner.nextLine(); 
+                scanner.nextLine();
 
                 
                 if (choice==4){
-                        break; 
+                        break;
                 }
                 if(choice<1 || choice >3) {  //|| or operator
                         System.out.println("Invalid choice! Please select 1-4.");
-                        continue; 
+                        continue;
                 }
 
                 
@@ -45,17 +52,17 @@ public class GreenPrintCLI1 {
                         System.out.print("Transport Type (Car, Bus, Train, Cycle): ");
                         String transport = scanner.nextLine().toLowerCase();
 
-                        if (transport.equals("car") || transport.equals("bus") || transport.equals("train") || transport.equals("cycle")) {
+                        if (transport.equals("car") || transport.equals("bus") || transport.equals("train") || transport.equals("cycle")){
                         System.out.print("Enter Distance (km): ");
                         double dist = scanner.nextDouble();
                         if (dist<0){
                                 System.out.println("Distance cant be negative. Try again!");
-                        } else{
+                        }else{
                                 ft.addEntry(new TransportationEmission(id, "transportation", date, user, dist, transport));
                                 System.out.println("Transportation added.");
                         }
                 } else{
-                        System.out.println("Error: '" + transport + "'. Please put something in our system.");
+                        System.out.println("Error '" + transport +". Please put something from our system.");
                 }
 
                 // --- FOOD ---
@@ -73,7 +80,7 @@ public class GreenPrintCLI1 {
                                 System.out.println("Food added.");
                         }
                 } else{
-                        System.out.println("Error: '" + meal + ". Please put something in our system.");
+                        System.out.println("Error: '" + meal + ". Please put something from our system.");
                 }
 
                 // --- ENERGY ---
@@ -98,11 +105,11 @@ public class GreenPrintCLI1 {
 
                 }catch(InputMismatchException e) {
                 System.out.println("ENTER A NUMBER.");
-                scanner.nextLine(); 
+                scanner.nextLine();
         }
         }
 
         ft.generateDailyReport();
         scanner.close();
-    }
+}
 }
