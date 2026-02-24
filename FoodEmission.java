@@ -59,7 +59,8 @@ public double calculateEmission(){
             System.out.println("Try again: Please pick from the following options Vegan | Vegetarian | Poultry | Beef |");
 
         }
-        return emissions*numberOfMeals;
+        double totalEmission = numberOfMeals*emissions;
+        return Math.round(totalEmission*100.0)/100.0; //@returns the amount of emissions per the number of meals;
 }
 
 @Override
