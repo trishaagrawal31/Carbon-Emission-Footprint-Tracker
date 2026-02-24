@@ -41,9 +41,8 @@ public class EnergyEmission extends EmissionSource {
         /** Emission factor in kg CO₂ per kWh */
         double emissionFactor=0.0;
 
-        if (this.energySource.equals(null)) {
-            emissionFactor = 0.37;
-        }else if (this.energySource.equals("grid")) {
+        
+        if (this.energySource.equals("grid")) {
             emissionFactor = 0.37;
 
         } else if (this.energySource.equals("solar")) {
@@ -68,9 +67,6 @@ public class EnergyEmission extends EmissionSource {
             emissionFactor = 0.309;
 
         
-        }else {
-            System.out.println("Data unavailable for the energy source.");
-            
         }
 
         return kWhUsed * emissionFactor;

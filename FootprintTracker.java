@@ -1,23 +1,21 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
- * Manages a collection of emission entries for all users in the GreenPrint carbon footprint tracking system.
- * This class serves as the central repository for all emission entries and provides functionality
- * to add entries, calculate totals, and generate formatted reports.
+ * Manages a collection of emission entries for all users
+ * in the GreenPrint carbon footprint tracking system.
  * 
- * The tracker demonstrates polymorphism by storing any subclass of EmissionSource
- * (TransportationEmission, EnergyEmission, FoodEmission) in its internal ArrayList.
  * 
  * @author Zainab
  */
 public class FootprintTracker {
-    
-    /** The name of this tracker instance (e.g., "RIT GreenPrint 2026") */
+
+
     private String trackerName;
     
     /** Collection of all emission entries, demonstrating polymorphic storage */
     private ArrayList<EmissionSource> entries;
-    
+
     /**
      * Constructs a new FootprintTracker with the specified name.
      * Initializes an empty ArrayList to store emission entries.
@@ -28,7 +26,7 @@ public class FootprintTracker {
         this.trackerName = trackerName;
         this.entries = new ArrayList<>();
     }
-    
+
     /**
      * Gets the name of this tracker.
      *
@@ -37,7 +35,7 @@ public class FootprintTracker {
     public String getTrackerName() {
         return trackerName;
     }
-    
+
     /**
      * Sets or updates the name of this tracker.
      *
@@ -46,7 +44,7 @@ public class FootprintTracker {
     public void setTrackerName(String trackerName) {
         this.trackerName = trackerName;
     }
-    
+
     /**
      * Gets the complete list of all emission entries stored in this tracker.
      *
@@ -55,11 +53,10 @@ public class FootprintTracker {
     public ArrayList<EmissionSource> getEntries() {
         return entries;
     }
-    
+
     /**
      * Adds a new emission entry to the tracker's collection.
      * Performs a null check before adding to ensure data integrity.
-     * This method demonstrates polymorphism by accepting any subclass of EmissionSource.
      *
      * @param entry The emission entry to add
      */
@@ -68,11 +65,9 @@ public class FootprintTracker {
             entries.add(entry);
         }
     }
-    
+
     /**
      * Calculates the total carbon emissions across all entries in the tracker.
-     * Iterates through the entire collection and sums the results of each entry's
-     * calculateEmission() method.
      *
      * @return Total emissions in kilograms of CO₂ for all entries
      */
@@ -83,79 +78,62 @@ public class FootprintTracker {
         }
         return total;
     }
-    
+
     /**
      * Calculates the total carbon emissions for a specific user only.
      * Filters entries by username before summing their emissions.
      *
      * @param userName The username to filter entries by
-     * @return Total emissions in kilograms of CO₂ for the specified user
+     * @return Total emissions in kilograms of CO2 for the specified user
      */
     public double getTotalEmissionsForUser(String userName) {
         double total = 0.0;
+
         for (EmissionSource entry : entries) {
-            if (entry.getUserName().equals(userName)) {
+            if (entry.getUserName().equalsIgnoreCase(userName)) {
                 total += entry.calculateEmission();
             }
         }
+
         return total;
     }
-    
+
     /**
      * Generates and prints a formatted daily report to the console.
      * The report includes:
-     * - Entries grouped by user
+     * - Entries grouped by user (case-insensitive)
      * - Each entry's complete details
      * - Per-user subtotals formatted to 2 decimal places
      * - A grand total across all users formatted to 2 decimal places
+     * 
      */
     public void generateDailyReport() {
+
         System.out.println("\n=== " + trackerName + " — Daily Report ===\n");
-        
-        // Get all unique usernames by iterating through entries
-        ArrayList<String> uniqueUsers = new ArrayList<>();
-        
+
+        HashSet<String> uniqueUsers = new HashSet<>();
+
+        // Store lowercase versions to group case-insensitively
         for (EmissionSource entry : entries) {
-            String currentUser = entry.getUserName();
-            
-            // Check if this username is already in our unique list
-            boolean userExists = false;
-            for (int i = 0; i < uniqueUsers.size(); i++) {
-                if (uniqueUsers.get(i).equals(currentUser)) {
-                    userExists = true;
-                    break;
-                }
-            }
-            
-            // If not found, add it to the unique list
-            if (!userExists) {
-                uniqueUsers.add(currentUser);
-            }
+            uniqueUsers.add(entry.getUserName().toLowerCase());
         }
-        
-        double grandTotal = 0.0;
-        
-        // Process each unique user
-        for (int i = 0; i < uniqueUsers.size(); i++) {
-            String userName = uniqueUsers.get(i);
+
+        for (String userName : uniqueUsers) {
+
             System.out.println("User: " + userName);
-            
-            double userSubtotal = 0.0;
-            
-            // Find and display all entries for this user
+
+            // Print entries for this user
             for (EmissionSource entry : entries) {
-                if (entry.getUserName().equals(userName)) {
+                if (entry.getUserName().equalsIgnoreCase(userName)) {
                     System.out.println(entry.toString());
-                    userSubtotal += entry.calculateEmission();
                 }
             }
+
             
-            // Display user subtotal with 2 decimal places
-            System.out.printf("Subtotal: %.2f kg CO₂\n\n", userSubtotal);
-            grandTotal += userSubtotal;
+            double userSubtotal = getTotalEmissionsForUser(userName);
+            System.out.printf("Subtotal: %.2f kg CO2\n\n", userSubtotal);
         }
-        
-        // Display grand total with 2 decimal places
-        System.out.printf("Grand Total: %.2f kg CO₂\n", grandTotal);
+
+        System.out.printf("Grand Total: %.2f kg CO2\n", getTotalEmissions());
     }
 }

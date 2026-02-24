@@ -32,20 +32,51 @@ public abstract class EmissionSource {
     }
 
     /**
-    Gets and sets the basic emission source properties:
-    source ID, category, date, and user name.
-    **/
-
+     * Gets the source ID for this emission entry.
+     * @return The unique identifier for this emission source
+     */
     public String getSourceID(){return sourceID;}
+    
+    /**
+     * Sets the source ID for this emission entry.
+     * @param sourceID The unique identifier to assign
+     */
     public void setSourceID(String sourceID){this.sourceID = sourceID;}
 
+    /**
+     * Gets the category of emission.
+     * @return The category (e.g., Transportation, Energy, Food)
+     */
     public String getCategory(){return category;}
+    
+    /**
+     * Sets the category of emission.
+     * @param category The emission category to assign
+     */
     public void setCategory(String category){this.category = category;}
 
+    /**
+     * Gets the date of the emission entry.
+     * @return The date string for this emission
+     */
     public String getDate(){return date;}
+    
+    /**
+     * Sets the date of the emission entry.
+     * @param date The date to assign
+     */
     public void setDate(String date){this.date = date;}
 
+    /**
+     * Gets the username of the person who logged this emission.
+     * @return The name of the user
+     */
     public String getUserName(){return userName;}
+    
+    /**
+     * Sets the username of the person who logged this emission.
+     * @param userName The user name to assign
+     */
     public void setUserName(String userName){this.userName = userName;}
 
     /**
@@ -64,9 +95,7 @@ public abstract class EmissionSource {
     
     @Override
     public String toString(){
-        return "Source ID: " + this.sourceID + 
-        " Category: " + this.category + " Date: " 
-        + this.date + " UserName: " + this.userName;
+        return this.sourceID + " | "+ this.category + " | " + this.date + " | " + this.userName;
     }
     
 }

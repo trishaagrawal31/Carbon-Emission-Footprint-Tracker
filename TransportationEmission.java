@@ -74,9 +74,7 @@ public class TransportationEmission extends EmissionSource {
         else if(this.transport.equals("cycle")){
             emissiona=0.00;
         }
-        else {
-            System.out.println("please put something from our choices");
-    }
+ 
     double totalEmission = distance*emissiona;
     return Math.round(totalEmission*100.0)/100.0;
     }
@@ -87,6 +85,6 @@ public class TransportationEmission extends EmissionSource {
      * @return formatted emission details including calculated CO2
      */
     public String toString() {
-        return super.toString()+" | Transport used :"+ transport +" | Distance travelled in km: "+distance+" | total emission is: "+calculateEmission() +" kg CO2/km";
+        return super.toString()+" | "+ transport +", "+distance+" km | "+calculateEmission() +" kg CO2";
     }
 }
