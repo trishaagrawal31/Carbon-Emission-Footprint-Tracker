@@ -21,7 +21,7 @@ public class FoodEmission extends EmissionSource  {
      * @param MealType the type of meal consumed
      * @param numberOfMeals the number of meals consumed
      */
-    public FoodEmission(String sourceID, String category, String date, String userName, String MealType, int numberOfMeals){
+    public FoodEmission(String sourceID, String category, String date, String userName, String mealType, int numberOfMeals){
         super(sourceID, category,date,userName);
     this.mealType= mealType.toLowerCase();
     this.numberOfMeals= numberOfMeals;
