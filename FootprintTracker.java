@@ -138,7 +138,7 @@ public class FootprintTracker {
         // Process each unique user
         for (int i = 0; i < uniqueUsers.size(); i++) {
             String userName = uniqueUsers.get(i);
-            System.out.println("**User:** " + userName);
+            System.out.println("User: " + userName);
             
             double userSubtotal = 0.0;
             
@@ -151,11 +151,11 @@ public class FootprintTracker {
             }
             
             // Display user subtotal with 2 decimal places
-            System.out.printf("**Subtotal:** %.2f kg CO₂\n\n", userSubtotal);
+            System.out.printf("Subtotal: %.2f kg CO₂\n\n", userSubtotal);
             grandTotal += userSubtotal;
         }
         
         // Display grand total with 2 decimal places
-        System.out.printf("**Grand Total:** %.2f kg CO₂\n", grandTotal);
+        System.out.printf("Grand Total: %.2f kg CO₂\n", grandTotal);
     }
 }
