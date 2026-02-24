@@ -36,7 +36,7 @@ public class GreenPrintCLI1 {
                 if (choice==4){
                         break;
                 }
-                if(choice<1 || choice >3) {  //|| or operator
+                if(choice<1 || choice >3) {  
                         System.out.println("Invalid choice! Please select 1-4.");
                         continue;
                 }
