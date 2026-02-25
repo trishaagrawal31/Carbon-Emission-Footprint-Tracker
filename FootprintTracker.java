@@ -109,7 +109,7 @@ public class FootprintTracker {
      */
     public void generateDailyReport() {
 
-        System.out.println("\n=== " + trackerName + " — Daily Report ===\n");
+        System.out.println("\n=== " + trackerName + "- Daily Report ===\n");
 
         HashSet<String> uniqueUsers = new HashSet<>();
 
