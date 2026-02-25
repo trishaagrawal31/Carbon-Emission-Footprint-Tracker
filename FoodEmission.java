@@ -46,7 +46,7 @@ public class FoodEmission extends EmissionSource {
      * @param mealType The type of meal to set
      */
     public void setMealType(String mealType) {
-        this.mealType = mealType;
+        this.mealType = mealType.toLowerCase();
     }
     
     /**
@@ -64,7 +64,7 @@ public class FoodEmission extends EmissionSource {
      * @param numberOfMeals The number of meals to set
      */
     public void setNumberOfMeals(int numberOfMeals) {
-        this.numberOfMeals = numberOfMeals;
+        this.numberOfMeals = Math.max(0, numberOfMeals);
     }
     /**
      * Calculates the total carbon emissions based on meal type and number of meals.
