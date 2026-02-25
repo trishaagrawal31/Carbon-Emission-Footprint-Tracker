@@ -45,9 +45,33 @@ public class GreenPrintCLI {
                 System.out.print("Enter Source ID:");
                 String id = scanner.nextLine();
                 if(id.isEmpty()) { System.out.println("ID cannot be empty!"); continue; }
-                System.out.print("Enter Date:");
-                String date = scanner.nextLine();
-                if(date.isEmpty()) { System.out.println("Date cannot be empty!"); continue; }
+                System.out.print("Enter Day (1-31): ");
+                int day = scanner.nextInt();
+
+                System.out.print("Enter Month (1-12): ");
+                int month = scanner.nextInt();
+
+                System.out.print("Enter Year (e.g., 2026): ");
+                int year = scanner.nextInt();
+                scanner.nextLine(); // clear buffer
+
+                if (day < 1 || day > 31) {
+                System.out.println("Invalid day! Try again.");
+                continue;
+                }
+
+                if (month < 1 || month > 12) {
+                System.out.println("Invalid month! Try again.");
+                continue;
+                }
+
+                if (year < 2000 || year > 2100) {
+                System.out.println("Invalid year! Try again.");
+                continue;
+                }
+
+                String date = day + "/" + month + "/" + year;
+
                 System.out.print("Enter User Name:");
                 String user = scanner.nextLine();
                 if(user.isEmpty()) { System.out.println("User name cannot be empty!"); continue; }
