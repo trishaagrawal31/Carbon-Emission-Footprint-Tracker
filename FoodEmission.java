@@ -29,7 +29,7 @@ public class FoodEmission extends EmissionSource {
     public FoodEmission(String sourceID, String category, String date, String userName, String mealType, int numberOfMeals) {
         super(sourceID, category, date, userName);
         this.mealType = mealType.toLowerCase();
-        this.numberOfMeals = numberOfMeals.Math.max(0,numberOfMeals);
+        this.numberOfMeals = numberOfMeals;
     }
     /**
      * Gets the meal type.
