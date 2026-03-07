@@ -1,3 +1,4 @@
+package ZeroCarbonFootprintTracker;
 /**
  * Represents an energy-based emission source.
  * This class calculates carbon emissions based on electricity usage (kWh) and the type of energy source used.

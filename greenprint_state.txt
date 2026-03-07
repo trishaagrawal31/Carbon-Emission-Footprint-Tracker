@@ -1,0 +1,2 @@
+R-009 | Food | 6-3-1029 | alice | vegetarian, 2 meals | 1.60 kg CO2
+Transportation|T-001|2-3-2029|bob|bus|23.0

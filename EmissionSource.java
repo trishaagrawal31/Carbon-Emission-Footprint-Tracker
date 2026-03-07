@@ -1,3 +1,4 @@
+package ZeroCarbonFootprintTracker;
 /**
 Represents a general emission source in the carbon footprint tracking system.
 

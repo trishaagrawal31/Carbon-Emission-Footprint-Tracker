@@ -1,3 +1,4 @@
+package ZeroCarbonFootprintTracker;
 public class GreenPrintCLI2 {
 /**
         Entry point for the GreenPrint Carbon Footprint Tracking System.

@@ -1,0 +1,54 @@
+2026-03-07 00:46:14 | OFFSET_PURCHASED | User: trisha | Payment: card
+2026-03-07 00:58:22 | STATE_SAVED | App closed. 0 entries saved to C:\Users\lenovo\Desktop\GCIS124\ZeroCarbonFootprintTracker\greenprint_state.txt
+2026-03-07 13:33:19 | ENTRY_ADDED | ID: T-001 | User: trisha | Transport=car dist=3.0
+2026-03-07 14:01:30 | STATE_LOADED | Restored 1 entries from C:\Users\lenovo\Desktop\GCIS124\greenprint_state.txt
+2026-03-07 14:02:21 | ENTRY_ADDED | ID: T-090 | User: alice | Energy=wind kwh=12.0
+2026-03-07 14:03:08 | OFFSET_PURCHASED | User: tri | Payment: Campus Card
+2026-03-07 14:03:21 | OFFSET_PURCHASED | User: trisha | Payment: Campus Card
+2026-03-07 15:35:45 | STATE_SAVED | 2 entries saved to C:\Users\lenovo\Desktop\GCIS124\greenprint_state.txt
+2026-03-07 15:35:59 | STATE_SAVED | App closed. 1 entries saved to C:\Users\lenovo\Desktop\GCIS124\ZeroCarbonFootprintTracker\greenprint_state.txt
+2026-03-07 15:36:21 | STATE_LOADED | Restored 2 entries from greenprint_state.txt
+2026-03-07 15:36:46 | ENTRY_ADDED | ID: E-003 | User: bob | Energy=diesel kwh=12.0
+2026-03-07 16:03:05 | STATE_SAVED | 3 entries saved to greenprint_state.txt
+2026-03-07 16:04:12 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:04:19 | STATE_SAVED | 1 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:06:15 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:07:14 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:08:01 | ENTRY_ADDED | ID: Y-000 | User: ava | Transport=bus dist=23.0
+2026-03-07 16:09:48 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:09:52 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:10:15 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:13:27 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:15:43 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:15:49 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:16:06 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:17:24 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:00 | STATE_SAVED | 1 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:00 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:16 | STATE_SAVED | 1 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:18 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:20 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:22 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:24 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:25 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:27 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:29 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:18:46 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:36:21 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:36:24 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:43:57 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 16:47:48 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:08:09 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:11:50 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:11:56 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:12:01 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:12:10 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:12:22 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:43:27 | STATE_SAVED | 0 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:43:36 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:43:42 | STATE_SAVED | 2 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:44:28 | ENTRY_ADDED | R-009 | Food | 6-3-1029 | alice | vegetarian, 2 meals | 1.60 kg CO2
+2026-03-07 17:45:05 | STATE_SAVED | 1 entries saved to ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 17:45:10 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-07 22:37:42 | ENTRY_ADDED | T-001 | Transportation | 2-3-2029 | bob | bus, 23.0 km | 2.23 kg CO2
+2026-03-08 00:27:52 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt

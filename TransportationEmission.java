@@ -1,3 +1,4 @@
+package ZeroCarbonFootprintTracker;
 /**
  * Represents an Transport-based emission source.
  * This class calculates carbon emissions based on distance travelled and type of transport mode used

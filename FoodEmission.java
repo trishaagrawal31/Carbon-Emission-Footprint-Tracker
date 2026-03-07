@@ -1,3 +1,5 @@
+
+package ZeroCarbonFootprintTracker;
 /**
  * Represents a food-based emission source.
  * This class calculates carbon emissions based on meal type and number of meals consumed.
