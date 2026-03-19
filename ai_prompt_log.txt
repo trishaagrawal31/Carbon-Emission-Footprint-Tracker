@@ -1,0 +1,1311 @@
+We gave the AI our FootprintTracker, FoodEmission, TransportEmission and EnergyEmission we had built before. 
+Prompt
+Generate a JavaFX with 3 tabs Dashboard, Input and Offset, using modular classes and regular expressions to validate the inputs and a logger file.
+
+The AI developed a "Persistence Manager”
+
+package ZeroCarbonFootprintTracker;
+
+import java.io.*;
+import java.util.ArrayList;
+
+public class PersistenceManager {
+    private static final String FILE_PATH = "greenprint_state.txt";
+
+    public static void saveState(ArrayList<EmissionSource> entries) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
+            for (EmissionSource e : entries) {
+                // Simplified CSV format: ClassType,ID,Category,Date,User,Val1,Val2
+                String type = e.getClass().getSimpleName();
+                if (e instanceof TransportationEmission t) {
+                    writer.printf("%s,%s,%s,%s,%s,%.2f,%s\n", type, t.getSourceID(), t.getCategory(), t.getDate(), t.getUserName(), t.getDistance(), t.getTransport());
+                } else if (e instanceof EnergyEmission en) {
+                    writer.printf("%s,%s,%s,%s,%s,%.2f,%s\n", type, en.getSourceID(), en.getCategory(), en.getDate(), en.getUserName(), en.getkWhUsed(), en.getEnergySource());
+                } else if (e instanceof FoodEmission f) {
+                    writer.printf("%s,%s,%s,%s,%s,%d,%s\n", type, f.getSourceID(), f.getCategory(), f.getDate(), f.getUserName(), f.getNumberOfMeals(), f.getMealType());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving state: " + e.getMessage());
+        }
+    }
+
+    public static void loadState(FootprintTracker tracker) {
+        File file = new File(FILE_PATH);
+        if (!file.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String type = parts[0];
+                switch (type) {
+                    case "TransportationEmission" -> tracker.addEntry(new TransportationEmission(parts[1], parts[2], parts[3], parts[4], Double.parseDouble(parts[5]), parts[6]));
+                    case "EnergyEmission" -> tracker.addEntry(new EnergyEmission(parts[1], parts[2], parts[3], parts[4], Double.parseDouble(parts[5]), parts[6]));
+                    case "FoodEmission" -> tracker.addEntry(new FoodEmission(parts[1], parts[2], parts[3], parts[4], parts[6], Integer.parseInt(parts[5])));
+                }
+            }
+        } catch (IOException | Exception e) {
+            System.err.println("Error loading state: " + e.getMessage());
+        }
+    }
+}
+
+We chose not to change anything to the Persistence Manager
+It then gave the GUI code
+
+package ZeroCarbonFootprintTracker;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+public class GreenPrintGUI extends Application {
+    private FootprintTracker tracker = new FootprintTracker("GreenPrint");
+    private Label totalEmissionsLabel = new Label("Total: 0.00 kg CO2");
+    private TextArea logArea = new TextArea();
+
+    @Override
+    public void start(Stage primaryStage) {
+        PersistenceManager.loadState(tracker);
+        updateDashboard();
+
+        TabPane tabPane = new TabPane();
+
+        // --- TAB 1: DASHBOARD ---
+        Tab dashTab = new Tab("Dashboard", createDashboard());
+        dashTab.setClosable(false);
+
+        // --- TAB 2: INPUT ---
+        Tab inputTab = new Tab("Input Entry", createInputTab());
+        inputTab.setClosable(false);
+
+        // --- TAB 3: OFFSET ---
+        Tab offsetTab = new Tab("Offset", createOffsetTab());
+        offsetTab.setClosable(false);
+
+        tabPane.getTabs().addAll(dashTab, inputTab, offsetTab);
+
+        Scene scene = new Scene(tabPane, 600, 500);
+        primaryStage.setTitle("GreenPrint Carbon Tracker");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private VBox createDashboard() {
+        VBox vbox = new VBox(15);
+        vbox.setPadding(new Insets(20));
+        Label header = new Label("Carbon Footprint Overview");
+        header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        
+        logArea.setEditable(false);
+        refreshLog();
+
+        vbox.getChildren().addAll(header, totalEmissionsLabel, new Label("Recent Activity:"), logArea);
+        return vbox;
+    }
+
+    private VBox createInputTab() {
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+
+        TextField userField = new TextField(); userField.setPromptText("Username");
+        TextField valField = new TextField(); valField.setPromptText("Value (km/kWh/Meals)");
+        ComboBox<String> typeBox = new ComboBox<>();
+        typeBox.getItems().addAll("Transportation", "Energy", "Food");
+        typeBox.setValue("Transportation");
+
+        Button submitBtn = new Button("Submit Transaction");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setVisible(false);
+
+        submitBtn.setOnAction(e -> {
+            String user = userField.getText();
+            String val = valField.getText();
+
+            // REGEX VALIDATION: Username (letters only), Value (numeric)
+            if (!user.matches("^[a-zA-Z]+$") || !val.matches("^\\d+(\\.\\d+)?$")) {
+                showAlert("Invalid Input", "Please check username (letters) and value (numbers).");
+                return;
+            }
+
+            // 2-SECOND TRANSACTION DELAY
+            submitBtn.setDisable(true);
+            progress.setVisible(true);
+            
+            Task<Void> task = new Task<>() {
+                @Override protected Void call() throws Exception {
+                    Thread.sleep(2000); 
+                    return null;
+                }
+                @Override protected void succeeded() {
+                    processEntry(user, typeBox.getValue(), Double.parseDouble(val));
+                    PersistenceManager.saveState(tracker.getEntries());
+                    updateDashboard();
+                    submitBtn.setDisable(false);
+                    progress.setVisible(false);
+                    userField.clear(); valField.clear();
+                }
+            };
+            new Thread(task).start();
+        });
+
+        vbox.getChildren().addAll(new Label("Log New Emission"), userField, typeBox, valField, submitBtn, progress);
+        return vbox;
+    }
+
+    private VBox createOffsetTab() {
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        Label info = new Label("Carbon Offsetting");
+        info.setStyle("-fx-font-size: 18px;");
+        
+        Label suggestion = new Label("Based on your usage, we suggest planting 2 trees.");
+        vbox.getChildren().addAll(info, suggestion, new Button("Purchase Offsets"));
+        return vbox;
+    }
+
+    private void processEntry(String user, String type, double val) {
+        String id = "ID-" + (tracker.getEntries().size() + 1);
+        String date = "2024-05-20"; // Simplified for example
+        
+        switch (type) {
+            case "Transportation" -> tracker.addEntry(new TransportationEmission(id, type, date, user, val, "car"));
+            case "Energy" -> tracker.addEntry(new EnergyEmission(id, type, date, user, val, "grid"));
+            case "Food" -> tracker.addEntry(new FoodEmission(id, type, date, user, "beef", (int)val));
+        }
+    }
+
+    private void updateDashboard() {
+        totalEmissionsLabel.setText(String.format("Total: %.2f kg CO2", tracker.getTotalEmissions()));
+        refreshLog();
+    }
+
+    private void refreshLog() {
+        StringBuilder sb = new StringBuilder();
+        for (EmissionSource e : tracker.getEntries()) {
+            sb.append(e.toString()).append("\n");
+        }
+        logArea.setText(sb.toString());
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+After that we edited it to meet our requirements
+
+Prompt:-the gui should allow the user to choose within the emissions of that group eg:-food has vegetarian , vegan, meat. emissions are different for each subtype
+
+Code:-
+package ZeroCarbonFootprintTracker;
+
+import javafx.application.Application;
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+public class GreenPrintApp extends Application {
+    private FootprintTracker tracker = new FootprintTracker("GreenPrint");
+    private Label totalLabel = new Label("Total: 0.00 kg CO2");
+    private TextArea logArea = new TextArea();
+
+    @Override
+    public void start(Stage primaryStage) {
+        PersistenceManager.loadState(tracker);
+        
+        TabPane tabPane = new TabPane();
+        
+        // Tab 1: Dashboard
+        Tab dashTab = new Tab("Dashboard", createDashboard());
+        dashTab.setClosable(false);
+
+        // Tab 2: Input
+        Tab inputTab = new Tab("Input", createInputTab());
+        inputTab.setClosable(false);
+
+        // Tab 3: Offset
+        Tab offsetTab = new Tab("Offset", createOffsetTab());
+        offsetTab.setClosable(false);
+
+        tabPane.getTabs().addAll(dashTab, inputTab, offsetTab);
+
+        updateDashboard();
+        
+        Scene scene = new Scene(tabPane, 700, 500);
+        primaryStage.setTitle("Zero Carbon Footprint Tracker");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private VBox createDashboard() {
+        VBox vbox = new VBox(15);
+        vbox.setPadding(new Insets(20));
+        Label title = new Label("Carbon Footprint Dashboard");
+        title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;");
+        
+        totalLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        logArea.setEditable(false);
+        logArea.setStyle("-fx-font-family: 'Monospaced';");
+
+        vbox.getChildren().addAll(title, totalLabel, new Label("Transaction History:"), logArea);
+        return vbox;
+    }
+
+    private VBox createInputTab() {
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(25));
+        vbox.setAlignment(Pos.TOP_LEFT);
+
+        TextField userField = new TextField(); userField.setPromptText("Username (e.g. Zainab)");
+        ComboBox<String> categoryBox = new ComboBox<>();
+        categoryBox.getItems().addAll("Transportation", "Energy", "Food");
+        categoryBox.setPromptText("Select Category");
+
+        ComboBox<String> subTypeBox = new ComboBox<>();
+        subTypeBox.setPromptText("Select Type");
+        subTypeBox.setDisable(true);
+
+        TextField valueField = new TextField(); valueField.setPromptText("Quantity (km/kWh/Meals)");
+
+        // Dynamic Dropdown Logic
+        categoryBox.setOnAction(e -> {
+            subTypeBox.setDisable(false);
+            subTypeBox.getItems().clear();
+            switch (categoryBox.getValue()) {
+                case "Transportation" -> subTypeBox.getItems().addAll("car", "bus", "train", "cycle");
+                case "Energy" -> subTypeBox.getItems().addAll("grid", "solar", "wind", "hydro", "coal", "diesel", "natural gas");
+                case "Food" -> subTypeBox.getItems().addAll("vegan", "vegetarian", "poultry", "beef");
+            }
+        });
+
+        Button submitBtn = new Button("Add Entry");
+        submitBtn.setStyle("-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold;");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setVisible(false);
+        progress.setMaxSize(30, 30);
+
+        submitBtn.setOnAction(e -> {
+            String user = userField.getText().trim();
+            String valStr = valueField.getText().trim();
+            String cat = categoryBox.getValue();
+            String sub = subTypeBox.getValue();
+
+            // REGEX: User (letters only), Value (positive number)
+            if (!user.matches("^[a-zA-Z]+$") || !valStr.matches("^\\d+(\\.\\d+)?$") || cat == null || sub == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Check your inputs! Username must be letters only.");
+                alert.show();
+                return;
+            }
+
+            // 2-SECOND DELAY TRANSACTION
+            submitBtn.setDisable(true);
+            progress.setVisible(true);
+
+            Task<Void> task = new Task<>() {
+                @Override protected Void call() throws Exception {
+                    Thread.sleep(2000); 
+                    return null;
+                }
+                @Override protected void succeeded() {
+                    double val = Double.parseDouble(valStr);
+                    addEntryPolymorphically(user, cat, sub, val);
+                    PersistenceManager.saveState(tracker.getEntries());
+                    updateDashboard();
+                    
+                    userField.clear(); valueField.clear();
+                    submitBtn.setDisable(false);
+                    progress.setVisible(false);
+                }
+            };
+            new Thread(task).start();
+        });
+
+        vbox.getChildren().addAll(new Label("User:"), userField, new Label("Category:"), categoryBox, 
+                                 new Label("Type:"), subTypeBox, new Label("Value:"), valueField, submitBtn, progress);
+        return vbox;
+    }
+
+    private VBox createOffsetTab() {
+        VBox vbox = new VBox(20);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.CENTER);
+        
+        Label info = new Label("How to Offset Your Carbon?");
+        info.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        
+        TextArea suggestions = new TextArea("1. Plant 1 tree for every 20kg of CO2.\n" +
+                                            "2. Switch to LED bulbs (saves ~50kg/year).\n" +
+                                            "3. Use a reusable water bottle.");
+        suggestions.setEditable(false);
+        
+        vbox.getChildren().addAll(info, suggestions);
+        return vbox;
+    }
+
+    private void addEntryPolymorphically(String user, String cat, String sub, double val) {
+        String id = "TXN-" + (tracker.getEntries().size() + 101);
+        String date = java.time.LocalDate.now().toString();
+        
+        switch (cat) {
+            case "Transportation" -> tracker.addEntry(new TransportationEmission(id, cat, date, user, val, sub));
+            case "Energy" -> tracker.addEntry(new EnergyEmission(id, cat, date, user, val, sub));
+            case "Food" -> tracker.addEntry(new FoodEmission(id, cat, date, user, sub, (int)val));
+        }
+    }
+
+    private void updateDashboard() {
+        totalLabel.setText(String.format("Total: %.2f kg CO2", tracker.getTotalEmissions()));
+        StringBuilder sb = new StringBuilder();
+        for (EmissionSource e : tracker.getEntries()) {
+            sb.append(e.toString()).append("\n");
+        }
+        logArea.setText(sb.toString());
+    }
+
+    public static void main(String[] args) { launch(args); }
+}
+
+
+
+Prompt:- it should also ask for username, name of person, date, and for eg distance traveled and mode of transport for transport emission , no of meals, and for energy emission type of energy used.
+
+Code:-
+package ZeroCarbonFootprintTracker;
+
+import javafx.application.Application;
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import java.time.LocalDate;
+
+public class GreenPrintApp extends Application {
+    private FootprintTracker tracker = new FootprintTracker("GreenPrint");
+    private Label totalLabel = new Label("Total: 0.00 kg CO2");
+    private TextArea logArea = new TextArea();
+
+    @Override
+    public void start(Stage primaryStage) {
+        // Load previous data from file on startup
+        PersistenceManager.loadState(tracker);
+        
+        TabPane tabPane = new TabPane();
+        
+        // Tab 1: Dashboard
+        Tab dashTab = new Tab("Dashboard", createDashboard());
+        dashTab.setClosable(false);
+
+        // Tab 2: Input (The updated form)
+        Tab inputTab = new Tab("Input", createInputTab());
+        inputTab.setClosable(false);
+
+        // Tab 3: Offset
+        Tab offsetTab = new Tab("Offset", createOffsetTab());
+        offsetTab.setClosable(false);
+
+        tabPane.getTabs().addAll(dashTab, inputTab, offsetTab);
+        updateDashboard();
+        
+        Scene scene = new Scene(tabPane, 750, 600);
+        primaryStage.setTitle("GreenPrint: Zero Carbon Tracker");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private VBox createInputTab() {
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.TOP_LEFT);
+
+        // --- Fields for all entries ---
+        TextField usernameField = new TextField(); 
+        usernameField.setPromptText("Username (e.g., zainab123)");
+        
+        TextField nameField = new TextField(); 
+        nameField.setPromptText("Full Name of Person");
+
+        DatePicker datePicker = new DatePicker(LocalDate.now());
+
+        ComboBox<String> categoryBox = new ComboBox<>();
+        categoryBox.getItems().addAll("Transportation", "Energy", "Food");
+        categoryBox.setPromptText("Select Category");
+
+        // --- Dynamic Fields ---
+        Label dynamicLabel = new Label("Details:");
+        ComboBox<String> subTypeBox = new ComboBox<>();
+        subTypeBox.setPromptText("Select Type (e.g., Car/Solar/Vegan)");
+        subTypeBox.setDisable(true);
+
+        TextField valueField = new TextField(); 
+        valueField.setPromptText("Quantity (km / kWh / Meals)");
+
+        // Logic to update sub-types based on Category
+        categoryBox.setOnAction(e -> {
+            subTypeBox.setDisable(false);
+            subTypeBox.getItems().clear();
+            String cat = categoryBox.getValue();
+            if (cat.equals("Transportation")) {
+                subTypeBox.getItems().addAll("car", "bus", "train", "cycle");
+                valueField.setPromptText("Distance in km");
+            } else if (cat.equals("Energy")) {
+                subTypeBox.getItems().addAll("grid", "solar", "wind", "hydro", "coal", "diesel", "natural gas");
+                valueField.setPromptText("Electricity in kWh");
+            } else if (cat.equals("Food")) {
+                subTypeBox.getItems().addAll("vegan", "vegetarian", "poultry", "beef");
+                valueField.setPromptText("Number of meals");
+            }
+        });
+
+        // --- Transaction Logic ---
+        Button submitBtn = new Button("Submit Transaction");
+        submitBtn.setStyle("-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold;");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setVisible(false);
+        progress.setMaxSize(30, 30);
+
+        submitBtn.setOnAction(e -> {
+            String user = usernameField.getText().trim();
+            String fullName = nameField.getText().trim();
+            String date = datePicker.getValue().toString();
+            String cat = categoryBox.getValue();
+            String sub = subTypeBox.getValue();
+            String valStr = valueField.getText().trim();
+
+            // REGEX VALIDATION
+            // Username: Alphanumeric. Full Name: Letters and spaces. Value: Numeric.
+            if (!user.matches("^[a-zA-Z0-9]+$") || !fullName.matches("^[a-zA-Z\\s]+$") || !valStr.matches("^\\d+(\\.\\d+)?$") || cat == null || sub == null) {
+                showAlert("Validation Error", "Please ensure:\n- Username has no spaces\n- Name contains only letters\n- Value is a valid number\n- All dropdowns are selected");
+                return;
+            }
+
+            // 2-SECOND DELAY
+            submitBtn.setDisable(true);
+            progress.setVisible(true);
+
+            Task<Void> task = new Task<>() {
+                @Override protected Void call() throws Exception {
+                    Thread.sleep(2000); 
+                    return null;
+                }
+                @Override protected void succeeded() {
+                    double val = Double.parseDouble(valStr);
+                    // Use your polymorphic classes
+                    addEntryToTracker(user, cat, sub, val, date);
+                    
+                    // Persistence
+                    PersistenceManager.saveState(tracker.getEntries());
+                    
+                    updateDashboard();
+                    clearFields(usernameField, nameField, valueField);
+                    submitBtn.setDisable(false);
+                    progress.setVisible(false);
+                    showAlert("Success", "Transaction saved to greenprint_state.txt");
+                }
+            };
+            new Thread(task).start();
+        });
+
+        vbox.getChildren().addAll(
+            new Label("Username:"), usernameField,
+            new Label("Name of Person:"), nameField,
+            new Label("Date:"), datePicker,
+            new Label("Category:"), categoryBox,
+            new Label("Type:"), subTypeBox,
+            new Label("Quantity:"), valueField,
+            submitBtn, progress
+        );
+        return vbox;
+    }
+
+    private void addEntryToTracker(String user, String cat, String sub, double val, String date) {
+        String id = "TXN-" + (tracker.getEntries().size() + 100);
+        // Map the GUI selection to your specific classes
+        switch (cat) {
+            case "Transportation" -> tracker.addEntry(new TransportationEmission(id, cat, date, user, val, sub));
+            case "Energy" -> tracker.addEntry(new EnergyEmission(id, cat, date, user, val, sub));
+            case "Food" -> tracker.addEntry(new FoodEmission(id, cat, date, user, sub, (int)val));
+        }
+    }
+
+    private VBox createDashboard() {
+        VBox vbox = new VBox(15);
+        vbox.setPadding(new Insets(20));
+        Label title = new Label("Carbon Usage Dashboard");
+        title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        logArea.setEditable(false);
+        vbox.getChildren().addAll(title, totalLabel, new Label("Recent Records:"), logArea);
+        return vbox;
+    }
+
+    private VBox createOffsetTab() {
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        vbox.getChildren().add(new Label("Carbon Offset Recommendations will appear here."));
+        return vbox;
+    }
+
+    private void updateDashboard() {
+        totalLabel.setText(String.format("Grand Total: %.2f kg CO2", tracker.getTotalEmissions()));
+        StringBuilder sb = new StringBuilder();
+        for (EmissionSource e : tracker.getEntries()) {
+            sb.append(e.toString()).append("\n");
+        }
+        logArea.setText(sb.toString());
+    }
+
+    private void clearFields(TextField u, TextField n, TextField v) {
+        u.clear(); n.clear(); v.clear();
+    }
+
+    private void showAlert(String title, String msg) {
+        new Alert(Alert.AlertType.INFORMATION, msg).show();
+    }
+
+    public static void main(String[] args) { launch(args); }
+}
+
+Prompt:-within the operation have an option for add entry and an option to search by user and if there are multiple entries for the same user it should be added together and shown 
+
+Code:-
+package ZeroCarbonFootprintTracker;
+
+import javafx.application.Application;
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import java.time.LocalDate;
+
+public class GreenPrintApp extends Application {
+    private FootprintTracker tracker = new FootprintTracker("GreenPrint");
+    private Label totalLabel = new Label("Grand Total: 0.00 kg CO2");
+    private TextArea logArea = new TextArea();
+
+    @Override
+    public void start(Stage primaryStage) {
+        PersistenceManager.loadState(tracker);
+        
+        TabPane tabPane = new TabPane();
+        
+        // Tab 1: Dashboard (History)
+        Tab dashTab = new Tab("History Log", createDashboard());
+        dashTab.setClosable(false);
+
+        // Tab 2: Operations (Add & Search)
+        Tab opsTab = new Tab("Operations", createOperationsTab());
+        opsTab.setClosable(false);
+
+        tabPane.getTabs().addAll(opsTab, dashTab);
+        updateDashboard();
+        
+        Scene scene = new Scene(tabPane, 800, 650);
+        primaryStage.setTitle("GreenPrint Carbon Management System");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private VBox createOperationsTab() {
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+
+        // --- SECTION 1: ADD ENTRY ---
+        VBox addBox = new VBox(10);
+        addBox.setStyle("-fx-border-color: #ccc; -fx-padding: 15; -fx-border-radius: 5;");
+        Label addTitle = new Label("Option 1: Add New Emission Entry");
+        addTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #2e7d32;");
+
+        TextField userIn = new TextField(); userIn.setPromptText("Username (Alpha-numeric)");
+        TextField nameIn = new TextField(); nameIn.setPromptText("Full Name");
+        DatePicker dateIn = new DatePicker(LocalDate.now());
+        
+        ComboBox<String> catBox = new ComboBox<>();
+        catBox.getItems().addAll("Transportation", "Energy", "Food");
+        catBox.setPromptText("Category");
+
+        ComboBox<String> subBox = new ComboBox<>();
+        subBox.setPromptText("Type");
+        subBox.setDisable(true);
+
+        TextField valIn = new TextField(); valIn.setPromptText("Quantity");
+
+        catBox.setOnAction(e -> {
+            subBox.setDisable(false);
+            subBox.getItems().clear();
+            if ("Transportation".equals(catBox.getValue())) subBox.getItems().addAll("car", "bus", "train", "cycle");
+            else if ("Energy".equals(catBox.getValue())) subBox.getItems().addAll("grid", "solar", "wind", "coal");
+            else if ("Food".equals(catBox.getValue())) subBox.getItems().addAll("vegan", "vegetarian", "poultry", "beef");
+        });
+
+        Button addBtn = new Button("Submit & Save");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setVisible(false); progress.setMaxSize(25, 25);
+
+        addBtn.setOnAction(e -> handleAddEntry(userIn, nameIn, dateIn, catBox, subBox, valIn, addBtn, progress));
+
+        HBox addActions = new HBox(10, addBtn, progress);
+        addActions.setAlignment(Pos.CENTER_LEFT);
+        addBox.getChildren().addAll(addTitle, userIn, nameIn, dateIn, catBox, subBox, valIn, addActions);
+
+        // --- SECTION 2: SEARCH USER ---
+        VBox searchBox = new VBox(10);
+        searchBox.setStyle("-fx-border-color: #ccc; -fx-padding: 15; -fx-border-radius: 5;");
+        Label searchTitle = new Label("Option 2: Search User Total Impact");
+        searchTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #1976d2;");
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Enter Username to Search...");
+        Button searchBtn = new Button("Search & Calculate");
+        TextArea searchResult = new TextArea();
+        searchResult.setEditable(false);
+        searchResult.setPrefHeight(100);
+
+        searchBtn.setOnAction(e -> {
+            String target = searchField.getText().trim();
+            if (target.isEmpty()) return;
+
+            double userSum = 0;
+            StringBuilder report = new StringBuilder("Records for: " + target + "\n------------------\n");
+            boolean found = false;
+
+            for (EmissionSource entry : tracker.getEntries()) {
+                if (entry.getUserName().equalsIgnoreCase(target)) {
+                    double emission = entry.calculateEmission();
+                    userSum += emission;
+                    report.append(String.format("[%s] %s: %.2f kg CO2\n", entry.getDate(), entry.getCategory(), emission));
+                    found = true;
+                }
+            }
+
+            if (found) {
+                report.append("------------------\nTOTAL FOOTPRINT: ").append(String.format("%.2f", userSum)).append(" kg CO2");
+            } else {
+                report.append("No entries found for this user.");
+            }
+            searchResult.setText(report.toString());
+        });
+
+        searchBox.getChildren().addAll(searchTitle, searchField, searchBtn, searchResult);
+
+        mainLayout.getChildren().addAll(addBox, searchBox);
+        return mainLayout;
+    }
+
+    private void handleAddEntry(TextField u, TextField n, DatePicker d, ComboBox<String> c, ComboBox<String> s, TextField v, Button btn, ProgressIndicator p) {
+        String user = u.getText().trim();
+        String valStr = v.getText().trim();
+
+        // Validation
+        if (!user.matches("^[a-zA-Z0-9]+$") || !valStr.matches("^\\d+(\\.\\d+)?$") || c.getValue() == null) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Input! Check Username and Quantity.").show();
+            return;
+        }
+
+        btn.setDisable(true);
+        p.setVisible(true);
+
+        Task<Void> task = new Task<>() {
+            @Override protected Void call() throws Exception {
+                Thread.sleep(2000); // 2-second delay
+                return null;
+            }
+            @Override protected void succeeded() {
+                addEntryToTracker(user, c.getValue(), s.getValue(), Double.parseDouble(valStr), d.getValue().toString());
+                PersistenceManager.saveState(tracker.getEntries());
+                updateDashboard();
+                u.clear(); v.clear();
+                btn.setDisable(false); p.setVisible(false);
+                new Alert(Alert.AlertType.INFORMATION, "Entry Added Successfully!").show();
+            }
+        };
+        new Thread(task).start();
+    }
+
+    private void addEntryToTracker(String user, String cat, String sub, double val, String date) {
+        String id = "TXN-" + System.currentTimeMillis() % 1000;
+        switch (cat) {
+            case "Transportation" -> tracker.addEntry(new TransportationEmission(id, cat, date, user, val, sub));
+            case "Energy" -> tracker.addEntry(new EnergyEmission(id, cat, date, user, val, sub));
+            case "Food" -> tracker.addEntry(new FoodEmission(id, cat, date, user, sub, (int)val));
+        }
+    }
+
+    private VBox createDashboard() {
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        logArea.setEditable(false);
+        vbox.getChildren().addAll(new Label("Global System Logs:"), totalLabel, logArea);
+        return vbox;
+    }
+
+    private void updateDashboard() {
+        totalLabel.setText(String.format("Grand Total: %.2f kg CO2", tracker.getTotalEmissions()));
+        StringBuilder sb = new StringBuilder();
+        for (EmissionSource e : tracker.getEntries()) sb.append(e.toString()).append("\n");
+        logArea.setText(sb.toString());
+    }
+
+    public static void main(String[] args) { launch(args); }
+}
+
+Prompt:-for live dashboard color code each block so that the depending on ampuntof emission done
+
+Code:-
+private ListView<EmissionSource> logListView = new ListView<>();
+
+private VBox createDashboard() {
+    VBox vbox = new VBox(15);
+    vbox.setPadding(new Insets(20));
+    
+    Label title = new Label("Live Emission Monitor");
+    title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+    
+    totalLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+
+    // Custom Cell Factory for Color Coding
+    logListView.setCellFactory(lv -> new ListCell<EmissionSource>() {
+        @Override
+        protected void updateItem(EmissionSource item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null) {
+                setText(null);
+                setStyle("-fx-background-color: transparent;");
+            } else {
+                double val = item.calculateEmission();
+                setText(item.toString());
+                
+                // Color Logic
+                if (val < 5.0) {
+                    setStyle("-fx-background-color: #c8e6c9; -fx-text-fill: #1b5e20; -fx-margin: 2;"); // Light Green
+                } else if (val <= 20.0) {
+                    setStyle("-fx-background-color: #fff9c4; -fx-text-fill: #f57f17; -fx-margin: 2;"); // Light Yellow
+                } else {
+                    setStyle("-fx-background-color: #ffcdd2; -fx-text-fill: #b71c1c; -fx-margin: 2;"); // Light Red
+                }
+                
+                setStyle(getStyle() + "-fx-border-color: white; -fx-border-width: 2; -fx-padding: 10;");
+            }
+        }
+    });
+
+    vbox.getChildren().addAll(title, totalLabel, new Label("Live Feed (Green=Low, Yellow=Mid, Red=High):"), logListView);
+    VBox.setVgrow(logListView, Priority.ALWAYS);
+    return vbox;
+}
+
+private void updateDashboard() {
+    // Update the Grand Total
+    totalLabel.setText(String.format("Grand Total System Impact: %.2f kg CO2", tracker.getTotalEmissions()));
+    
+    // Refresh the ListView
+    logListView.getItems().clear();
+    logListView.getItems().addAll(tracker.getEntries());
+}
+
+Prompt:- Carbon offset should be changed so that you can input the username so that the total amount of money can be paid and prints a receipt
+
+Code:-
+package ZeroCarbonFootprintTracker;
+
+import javafx.application.Application;
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import java.time.LocalDate;
+
+public class GreenPrintApp extends Application {
+    private FootprintTracker tracker = new FootprintTracker("GreenPrint");
+    private Label totalLabel = new Label("Grand Total: 0.00 kg CO2");
+    private ListView<EmissionSource> logListView = new ListView<>();
+
+    @Override
+    public void start(Stage primaryStage) {
+        // Load data from greenprint_state.txt if it exists
+        PersistenceManager.loadState(tracker);
+        
+        TabPane tabPane = new TabPane();
+        
+        // Tab 1: Operations (Add Entry & Search)
+        Tab opsTab = new Tab("Operations", createOperationsTab());
+        opsTab.setClosable(false);
+
+        // Tab 2: Dashboard (Color-coded Live Feed)
+        Tab dashTab = new Tab("Live Dashboard", createDashboard());
+        dashTab.setClosable(false);
+
+        // Tab 3: Offset (Payment & Receipts)
+        Tab offsetTab = new Tab("Carbon Offset", createOffsetTab());
+        offsetTab.setClosable(false);
+
+        tabPane.getTabs().addAll(opsTab, dashTab, offsetTab);
+        updateDashboard();
+        
+        Scene scene = new Scene(tabPane, 850, 700);
+        primaryStage.setTitle("GreenPrint: Zero Carbon Management System");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    // --- TAB 1: OPERATIONS (ADD & SEARCH) ---
+    private VBox createOperationsTab() {
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+
+        // Add Entry Section
+        VBox addBox = new VBox(10);
+        addBox.setStyle("-fx-border-color: #2e7d32; -fx-padding: 15; -fx-border-radius: 8; -fx-background-color: #f1f8e9;");
+        Label addTitle = new Label("Add New Emission Entry");
+        addTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10); grid.setVgap(10);
+        
+        TextField userIn = new TextField(); userIn.setPromptText("Username (alphanumeric)");
+        TextField nameIn = new TextField(); nameIn.setPromptText("Full Name");
+        DatePicker dateIn = new DatePicker(LocalDate.now());
+        ComboBox<String> catBox = new ComboBox<>();
+        catBox.getItems().addAll("Transportation", "Energy", "Food");
+        ComboBox<String> subBox = new ComboBox<>();
+        subBox.setPromptText("Select Sub-type");
+        subBox.setDisable(true);
+        TextField valIn = new TextField(); valIn.setPromptText("Quantity (km/kWh/Meals)");
+
+        catBox.setOnAction(e -> {
+            subBox.setDisable(false);
+            subBox.getItems().clear();
+            String cat = catBox.getValue();
+            if ("Transportation".equals(cat)) subBox.getItems().addAll("car", "bus", "train", "cycle");
+            else if ("Energy".equals(cat)) subBox.getItems().addAll("grid", "solar", "wind", "coal", "diesel");
+            else if ("Food".equals(cat)) subBox.getItems().addAll("vegan", "vegetarian", "poultry", "beef");
+        });
+
+        grid.addRow(0, new Label("Username:"), userIn, new Label("Full Name:"), nameIn);
+        grid.addRow(1, new Label("Date:"), dateIn, new Label("Category:"), catBox);
+        grid.addRow(2, new Label("Type:"), subBox, new Label("Quantity:"), valIn);
+
+        Button addBtn = new Button("Confirm Transaction");
+        addBtn.setStyle("-fx-background-color: #2e7d32; -fx-text-fill: white;");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setVisible(false); progress.setMaxSize(25, 25);
+
+        addBtn.setOnAction(e -> handleAdd(userIn, nameIn, dateIn, catBox, subBox, valIn, addBtn, progress));
+
+        addBox.getChildren().addAll(addTitle, grid, new HBox(10, addBtn, progress));
+
+        // Search Section
+        VBox searchBox = new VBox(10);
+        searchBox.setStyle("-fx-border-color: #1976d2; -fx-padding: 15; -fx-border-radius: 8; -fx-background-color: #e3f2fd;");
+        Label searchTitle = new Label("Search & Aggregate User History");
+        searchTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+
+        TextField searchField = new TextField(); searchField.setPromptText("Enter username to calculate total...");
+        Button searchBtn = new Button("Run Search");
+        TextArea searchRes = new TextArea(); searchRes.setEditable(false); searchRes.setPrefHeight(120);
+
+        searchBtn.setOnAction(e -> handleSearch(searchField.getText(), searchRes));
+
+        searchBox.getChildren().addAll(searchTitle, new HBox(10, searchField, searchBtn), searchRes);
+
+        mainLayout.getChildren().addAll(addBox, searchBox);
+        return mainLayout;
+    }
+
+    // --- TAB 2: LIVE DASHBOARD (COLOR CODED) ---
+    private VBox createDashboard() {
+        VBox vbox = new VBox(15);
+        vbox.setPadding(new Insets(20));
+        
+        Label title = new Label("Live System Impact Feed");
+        title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        totalLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1b5e20;");
+
+        logListView.setCellFactory(lv -> new ListCell<EmissionSource>() {
+            @Override
+            protected void updateItem(EmissionSource item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("-fx-background-color: transparent;");
+                } else {
+                    double val = item.calculateEmission();
+                    setText(item.toString());
+                    if (val < 5.0) setStyle("-fx-background-color: #c8e6c9; -fx-text-fill: #1b5e20;"); // Green
+                    else if (val <= 20.0) setStyle("-fx-background-color: #fff9c4; -fx-text-fill: #f57f17;"); // Yellow
+                    else setStyle("-fx-background-color: #ffcdd2; -fx-text-fill: #b71c1c;"); // Red
+                    
+                    setStyle(getStyle() + "-fx-border-color: white; -fx-border-width: 1; -fx-padding: 8;");
+                }
+            }
+        });
+
+        vbox.getChildren().addAll(title, totalLabel, new Label("Recent Activity (Green < 5kg, Yellow 5-20kg, Red > 20kg):"), logListView);
+        VBox.setVgrow(logListView, Priority.ALWAYS);
+        return vbox;
+    }
+
+    // --- TAB 3: OFFSET (RECEIPTS) ---
+    private VBox createOffsetTab() {
+        VBox vbox = new VBox(15);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        Label title = new Label("Carbon Offset Payment Portal");
+        title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+
+        TextField offsetUserField = new TextField(); offsetUserField.setPromptText("Username");
+        Button calculateBtn = new Button("Check Balance");
+        Label statusLabel = new Label("Status: Waiting for input");
+        
+        TextArea receiptArea = new TextArea();
+        receiptArea.setEditable(false);
+        receiptArea.setStyle("-fx-font-family: 'Monospaced';");
+        receiptArea.setPrefHeight(300);
+
+        Button payBtn = new Button("Process Payment & Print Receipt");
+        payBtn.setDisable(true);
+        payBtn.setStyle("-fx-background-color: #1b5e20; -fx-text-fill: white;");
+
+        calculateBtn.setOnAction(e -> {
+            String user = offsetUserField.getText().trim();
+            double total = tracker.getEntries().stream()
+                    .filter(en -> en.getUserName().equalsIgnoreCase(user))
+                    .mapToDouble(EmissionSource::calculateEmission).sum();
+            
+            if (total > 0) {
+                statusLabel.setText(String.format("User: %s | Owed: $%.2f (Rate: $0.15/kg)", user, total * 0.15));
+                payBtn.setDisable(false);
+            } else {
+                statusLabel.setText("No emissions found for this user.");
+                payBtn.setDisable(true);
+            }
+        });
+
+        payBtn.setOnAction(e -> {
+            String user = offsetUserField.getText().trim();
+            double totalKg = tracker.getEntries().stream()
+                    .filter(en -> en.getUserName().equalsIgnoreCase(user))
+                    .mapToDouble(EmissionSource::calculateEmission).sum();
+            
+            String receipt = String.format(
+                "================================\n" +
+                "       OFFICIAL RECEIPT         \n" +
+                "================================\n" +
+                "Date:      %s\n" +
+                "Customer:  %s\n" +
+                "--------------------------------\n" +
+                "Total CO2: %10.2f kg\n" +
+                "Price/kg:  $      0.15\n" +
+                "--------------------------------\n" +
+                "PAID:      $%10.2f\n" +
+                "================================\n" +
+                "   THANK YOU FOR OFFSETTING!    ", 
+                LocalDate.now(), user.toUpperCase(), totalKg, totalKg * 0.15);
+            receiptArea.setText(receipt);
+            new Alert(Alert.AlertType.INFORMATION, "Payment successful! Receipt generated.").show();
+        });
+
+        vbox.getChildren().addAll(title, new HBox(10, offsetUserField, calculateBtn), statusLabel, payBtn, receiptArea);
+        return vbox;
+    }
+
+    // --- HELPER METHODS ---
+    private void handleAdd(TextField u, TextField n, DatePicker d, ComboBox<String> c, ComboBox<String> s, TextField v, Button b, ProgressIndicator p) {
+        String user = u.getText().trim();
+        String valStr = v.getText().trim();
+        if (!user.matches("^[a-zA-Z0-9]+$") || !valStr.matches("^\\d+(\\.\\d+)?$") || c.getValue() == null) {
+            new Alert(Alert.AlertType.ERROR, "Regex Error: Use alphanumeric usernames and numeric quantities.").show();
+            return;
+        }
+
+        b.setDisable(true); p.setVisible(true);
+        Task<Void> task = new Task<>() {
+            @Override protected Void call() throws Exception { Thread.sleep(2000); return null; }
+            @Override protected void succeeded() {
+                addEntryToTracker(user, c.getValue(), s.getValue(), Double.parseDouble(valStr), d.getValue().toString());
+                PersistenceManager.saveState(tracker.getEntries());
+                updateDashboard();
+                u.clear(); v.clear(); b.setDisable(false); p.setVisible(false);
+            }
+        };
+        new Thread(task).start();
+    }
+
+    private void handleSearch(String target, TextArea res) {
+        if (target == null || target.isEmpty()) return;
+        double sum = 0;
+        StringBuilder sb = new StringBuilder("Detailed Report for " + target + ":\n");
+        for (EmissionSource e : tracker.getEntries()) {
+            if (e.getUserName().equalsIgnoreCase(target)) {
+                double em = e.calculateEmission();
+                sum += em;
+                sb.append(String.format("- [%s] %s: %.2f kg\n", e.getDate(), e.getCategory(), em));
+            }
+        }
+        sb.append("----------------------------\nTOTAL AGGREGATED: ").append(String.format("%.2f", sum)).append(" kg CO2");
+        res.setText(sb.toString());
+    }
+
+    private void addEntryToTracker(String user, String cat, String sub, double val, String date) {
+        String id = "TXN-" + System.currentTimeMillis() % 10000;
+        switch (cat) {
+            case "Transportation" -> tracker.addEntry(new TransportationEmission(id, cat, date, user, val, sub));
+            case "Energy" -> tracker.addEntry(new EnergyEmission(id, cat, date, user, val, sub));
+            case "Food" -> tracker.addEntry(new FoodEmission(id, cat, date, user, sub, (int)val));
+        }
+    }
+
+    private void updateDashboard() {
+        totalLabel.setText(String.format("Grand Total System Impact: %.2f kg CO2", tracker.getTotalEmissions()));
+        logListView.getItems().setAll(tracker.getEntries());
+    }
+
+    public static void main(String[] args) { launch(args); }
+}
+
+Prompt :- make sure to add username to the output
+
+Code:-
+package ZeroCarbonFootprintTracker;
+
+import javafx.application.Application;
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import java.time.LocalDate;
+
+public class GreenPrintApp extends Application {
+    private FootprintTracker tracker = new FootprintTracker("GreenPrint");
+    private Label totalLabel = new Label("Grand Total: 0.00 kg CO2");
+    private ListView<EmissionSource> logListView = new ListView<>();
+
+    @Override
+    public void start(Stage primaryStage) {
+        PersistenceManager.loadState(tracker);
+        
+        TabPane tabPane = new TabPane();
+        tabPane.getTabs().addAll(
+            new Tab("Operations", createOperationsTab()),
+            new Tab("Live Dashboard", createDashboard()),
+            new Tab("Carbon Offset", createOffsetTab())
+        );
+        tabPane.getTabs().forEach(t -> t.setClosable(false));
+
+        updateDashboard();
+        
+        Scene scene = new Scene(tabPane, 900, 750);
+        primaryStage.setTitle("GreenPrint: Zero Carbon Management System");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private VBox createOperationsTab() {
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+
+        // --- ADD ENTRY SECTION ---
+        VBox addBox = new VBox(10);
+        addBox.setStyle("-fx-border-color: #2e7d32; -fx-padding: 15; -fx-border-radius: 8; -fx-background-color: #f1f8e9;");
+        
+        GridPane grid = new GridPane();
+        grid.setHgap(10); grid.setVgap(10);
+        
+        TextField userIn = new TextField(); userIn.setPromptText("User ID");
+        TextField nameIn = new TextField(); nameIn.setPromptText("Display Name");
+        TextField dateIn = new TextField(LocalDate.now().toString()); 
+        
+        ComboBox<String> catBox = new ComboBox<>();
+        catBox.getItems().addAll("Transportation", "Energy", "Food");
+        ComboBox<String> subBox = new ComboBox<>();
+        subBox.setDisable(true);
+        TextField valIn = new TextField();
+
+        catBox.setOnAction(e -> {
+            subBox.setDisable(false);
+            subBox.getItems().clear();
+            String cat = catBox.getValue();
+            if ("Transportation".equals(cat)) subBox.getItems().addAll("car", "bus", "train", "cycle");
+            else if ("Energy".equals(cat)) subBox.getItems().addAll("grid", "solar", "wind", "coal", "diesel");
+            else if ("Food".equals(cat)) subBox.getItems().addAll("vegan", "vegetarian", "poultry", "beef");
+        });
+
+        grid.addRow(0, new Label("Username:"), userIn, new Label("Full Name:"), nameIn);
+        grid.addRow(1, new Label("Date (YYYY-MM-DD):"), dateIn, new Label("Category:"), catBox);
+        grid.addRow(2, new Label("Type:"), subBox, new Label("Quantity:"), valIn);
+
+        Button addBtn = new Button("Submit Entry");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setVisible(false); progress.setMaxSize(25, 25);
+
+        addBtn.setOnAction(e -> handleAdd(userIn, nameIn, dateIn, catBox, subBox, valIn, addBtn, progress));
+        addBox.getChildren().addAll(new Label("LOG NEW DATA"), grid, new HBox(10, addBtn, progress));
+
+        // --- SEARCH SECTION ---
+        VBox searchBox = new VBox(10);
+        searchBox.setStyle("-fx-border-color: #1976d2; -fx-padding: 15; -fx-border-radius: 8; -fx-background-color: #e3f2fd;");
+        TextField searchField = new TextField(); searchField.setPromptText("Enter Username...");
+        Button searchBtn = new Button("Aggregate Data");
+        TextArea searchRes = new TextArea(); searchRes.setEditable(false);
+        
+        searchBtn.setOnAction(e -> handleSearch(searchField.getText(), searchRes));
+        searchBox.getChildren().addAll(new Label("USER SEARCH"), new HBox(10, searchField, searchBtn), searchRes);
+
+        mainLayout.getChildren().addAll(addBox, searchBox);
+        return mainLayout;
+    }
+
+    private VBox createDashboard() {
+        VBox vbox = new VBox(15);
+        vbox.setPadding(new Insets(20));
+        
+        logListView.setCellFactory(lv -> new ListCell<EmissionSource>() {
+            @Override
+            protected void updateItem(EmissionSource item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null); setStyle("");
+                } else {
+                    // Added Explicit "USER: [Name]" to the output line
+                    setText("USER: " + item.getUserName().toUpperCase() + " | " + item.toString());
+                    double val = item.calculateEmission();
+                    if (val < 5.0) setStyle("-fx-background-color: #c8e6c9; -fx-text-fill: #1b5e20;");
+                    else if (val <= 20.0) setStyle("-fx-background-color: #fff9c4; -fx-text-fill: #f57f17;");
+                    else setStyle("-fx-background-color: #ffcdd2; -fx-text-fill: #b71c1c;");
+                    setStyle(getStyle() + "-fx-border-color: white; -fx-padding: 10; -fx-font-weight: bold;");
+                }
+            }
+        });
+        vbox.getChildren().addAll(new Label("LIVE ACTIVITY LOG"), totalLabel, logListView);
+        VBox.setVgrow(logListView, Priority.ALWAYS);
+        return vbox;
+    }
+
+    private VBox createOffsetTab() {
+        VBox vbox = new VBox(15);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.TOP_CENTER);
+        
+        TextField offsetUser = new TextField(); offsetUser.setPromptText("Username");
+        Button calcBtn = new Button("Verify User Balance");
+        TextArea receiptArea = new TextArea(); receiptArea.setStyle("-fx-font-family: 'Monospaced';");
+        Button payBtn = new Button("Finalize Offset");
+        payBtn.setDisable(true);
+
+        calcBtn.setOnAction(e -> {
+            String target = offsetUser.getText().trim();
+            double total = tracker.getEntries().stream()
+                    .filter(en -> en.getUserName().equalsIgnoreCase(target))
+                    .mapToDouble(EmissionSource::calculateEmission).sum();
+            payBtn.setDisable(total <= 0);
+        });
+
+        payBtn.setOnAction(e -> {
+            String user = offsetUser.getText().trim();
+            double totalKg = tracker.getEntries().stream()
+                    .filter(en -> en.getUserName().equalsIgnoreCase(user))
+                    .mapToDouble(EmissionSource::calculateEmission).sum();
+            
+            receiptArea.setText(String.format(
+                "================================\n" +
+                "       GREENPRINT RECEIPT       \n" +
+                "================================\n" +
+                "USERNAME:  %s\n" + // Added Username here
+                "DATE:      %s\n" +
+                "--------------------------------\n" +
+                "TOTAL CO2: %10.2f kg\n" +
+                "TOTAL DUE: $%10.2f\n" +
+                "================================", 
+                user.toUpperCase(), LocalDate.now(), totalKg, totalKg * 0.15));
+        });
+
+        vbox.getChildren().addAll(new Label("CARBON OFFSET PORTAL"), new HBox(10, offsetUser, calcBtn), payBtn, receiptArea);
+        return vbox;
+    }
+
+    private void handleAdd(TextField u, TextField n, TextField d, ComboBox<String> c, ComboBox<String> s, TextField v, Button b, ProgressIndicator p) {
+        String user = u.getText().trim();
+        String date = d.getText().trim();
+        String valStr = v.getText().trim();
+
+        if (!user.matches("^[a-zA-Z0-9]+$") || !date.matches("^\\d{4}-\\d{2}-\\d{2}$") || !valStr.matches("^\\d+(\\.\\d+)?$")) {
+            new Alert(Alert.AlertType.ERROR, "Check Format: Username (No spaces), Date (YYYY-MM-DD)").show();
+            return;
+        }
+
+        b.setDisable(true); p.setVisible(true);
+        Task<Void> task = new Task<>() {
+            @Override protected Void call() throws Exception { Thread.sleep(2000); return null; }
+            @Override protected void succeeded() {
+                addEntryToTracker(user, c.getValue(), s.getValue(), Double.parseDouble(valStr), date);
+                PersistenceManager.saveState(tracker.getEntries());
+                updateDashboard();
+                u.clear(); v.clear(); b.setDisable(false); p.setVisible(false);
+            }
+        };
+        new Thread(task).start();
+    }
+
+    private void handleSearch(String target, TextArea res) {
+        if (target == null || target.isEmpty()) return;
+        double sum = 0;
+        // Search output clearly labeled with Username
+        StringBuilder sb = new StringBuilder("AGGREGATED REPORT FOR USER: " + target.toUpperCase() + "\n");
+        sb.append("--------------------------------------------------\n");
+        for (EmissionSource e : tracker.getEntries()) {
+            if (e.getUserName().equalsIgnoreCase(target)) {
+                sum += e.calculateEmission();
+                sb.append(String.format("[%s] Category: %-15s | %s\n", e.getDate(), e.getCategory(), e.toString()));
+            }
+        }
+        sb.append("--------------------------------------------------\n");
+        sb.append("TOTAL AGGREGATED IMPACT: ").append(String.format("%.2f", sum)).append(" kg CO2");
+        res.setText(sb.toString());
+    }
+
+    private void addEntryToTracker(String user, String cat, String sub, double val, String date) {
+        String id = "TXN-" + System.currentTimeMillis() % 10000;
+        switch (cat) {
+            case "Transportation" -> tracker.addEntry(new TransportationEmission(id, cat, date, user, val, sub));
+            case "Energy" -> tracker.addEntry(new EnergyEmission(id, cat, date, user, val, sub));
+            case "Food" -> tracker.addEntry(new FoodEmission(id, cat, date, user, sub, (int)val));
+        }
+    }
+
+    private void updateDashboard() {
+        totalLabel.setText(String.format("Grand Total System Impact: %.2f kg CO2", tracker.getTotalEmissions()));
+        logListView.getItems().setAll(tracker.getEntries());
+    }
+
+    public static void main(String[] args) { launch(args); }
+}
+
+We finalised on this code as we believed it covers all parts of the needed rubric 
