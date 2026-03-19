@@ -52,3 +52,15 @@
 2026-03-07 17:45:10 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-07 22:37:42 | ENTRY_ADDED | T-001 | Transportation | 2-3-2029 | bob | bus, 23.0 km | 2.23 kg CO2
 2026-03-08 00:27:52 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-16 07:34:34 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-16 07:38:12 | OFFSET_PURCHASED | User: bob | Payment: Credit Card
+2026-03-18 21:27:57 | STATE_SAVED | 1 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:55:42 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:55:50 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:55:58 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:56:10 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:57:44 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:58:13 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:58:21 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 07:59:53 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 08:00:04 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt

@@ -7,20 +7,28 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Utility class for appending timestamped operation logs to greenprint_log.txt.
- *
- * Use the provided constants for operationType to ensure consistent log formatting.
- * All file I/O is wrapped in try-catch blocks so a log failure never crashes the app.
+ * Each log entry includes the timestamp, operation type, and relevant details.
+ */
+/**
+ * Utility class for appending timestamped operation logs to greenprint_log.txt.
+ * Each log entry includes an operation type, details, and a formatted timestamp.
  */
 public class Logger {
 
     public enum Operation { ENTRY_ADDED, OFFSET_PURCHASED, STATE_SAVED, STATE_LOADED }
 
-    // relative path (current working directory) – example uses "./log.txt" style
+    // relative path (current working directory) 
     private static final String LOG_FILE = "./ZeroCarbonFootprintTracker/greenprint_log.txt";  // writes to whichever directory the JVM is started in
 
     public static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Writes a log message to the tracker log file.
+     *
+     * @param operationType type of operation being logged
+     * @param details      extra details to include in the log record
+     */
     public static void log(Operation operationType, String details) {
         String timestamp = LocalDateTime.now().format(FORMATTER);
         String logLine   = timestamp + " | " + operationType.name() + " | " + details;

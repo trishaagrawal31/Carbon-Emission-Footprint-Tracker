@@ -16,7 +16,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -34,7 +33,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -45,19 +43,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * GUI for the ZeroCarbonFootprintTracker.
+ * The GUI supports three tabs: live dashboard, input and operations, 
+ * and carbon offset market. It manages state persistence, entry
+ * validation, and transaction flow.
+ */
 public class GUI extends Application {
 
     private static final DateTimeFormatter DATE_FMT  = DateTimeFormatter.ofPattern("d-M-yyyy");
     private static final String STATE_FILE = "./ZeroCarbonFootprintTracker/greenprint_state.txt"; 
-    private FootprintTracker   tracker            = new FootprintTracker("RIT GreenPrint 2026");
+    private FootprintTracker   tracker  = new FootprintTracker("RIT GreenPrint 2026");
     private TransactionHandler transactionHandler = new TransactionHandler(tracker);
-
-
 
     private FlowPane dashboardGrid;
     private Label    summaryLabel;
     private Label    detailLabel;
-
     private TextField        idField;
     private Label            validationLabel;
     private TextField        userField;
@@ -69,7 +70,6 @@ public class GUI extends Application {
     private Label            feedbackLabel;
     private TextField        searchField;
     private ListView<String> searchList;
-
     private Label            totalEmissionsLabel;
     private TextField        offsetUserField;
     private ComboBox<String> paymentCombo;
@@ -77,10 +77,15 @@ public class GUI extends Application {
     private ListView<String> offsetHistoryList;
 
     @Override
+    /**
+     * Initializes UI components, loads persisted state entries, and configures event handlers for dashboard interactions.
+     *
+     * @param stage primary stage provided by the JavaFX runtime
+     */
     public void start(Stage stage) {
         loadState();
 
-        // ── TAB 1: Live Dashboard ────────────────────────────────
+        //TAB 1: Live Dashboard
         VBox dashLayout = new VBox(12);
         dashLayout.setPadding(new Insets(20));
 
@@ -88,8 +93,7 @@ public class GUI extends Application {
 
         summaryLabel = new Label("Total Entries: 0  |  Total CO2: 0.00 kg  |  Top Emitter: N/A");
         summaryLabel.setFont(new Font("Arial", 13));
-        summaryLabel.setBackground(new Background(
-            new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        summaryLabel.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         summaryLabel.setPadding(new Insets(8));
 
         dashboardGrid = new FlowPane(10, 10);
@@ -100,21 +104,20 @@ public class GUI extends Application {
         detailLabel = new Label("Click a card above to see its full details.");
         detailLabel.setFont(new Font("Arial", 12));
         detailLabel.setPadding(new Insets(8));
-        detailLabel.setBackground(new Background(
-            new BackgroundFill(Color.LIGHTYELLOW, new CornerRadii(4), Insets.EMPTY)));
+        detailLabel.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, new CornerRadii(4), Insets.EMPTY)));
         detailLabel.setWrapText(true);
 
         dashLayout.getChildren().addAll(
             dashHeading, summaryLabel, gridScroll,
             new Label("Entry Details:"), detailLabel);
 
-        // ── TAB 2: Input & Operations ────────────────────────────
+        //TAB 2: Input & Operations
         VBox inputLayout = new VBox(12);
         inputLayout.setPadding(new Insets(20));
 
         Label inputHeading = makeHeading("Add New Emission Entry");
 
-        // Source ID with real-time regex validation
+        // Source ID
         idField = new TextField();
         idField.setPromptText("e.g. T-001");
         idField.setMaxWidth(200);
@@ -122,11 +125,10 @@ public class GUI extends Application {
         validationLabel = new Label();
         validationLabel.setFont(new Font("Arial", 12));
 
-        // ChangeListener on textProperty — fires on every keystroke
+        //realtime validation 
         idField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> obs,
-                                String oldVal, String newVal) {
+            public void changed(ObservableValue<? extends String> obs,String oldVal, String newVal) {
                 if (InputValidator.validateSourceId(newVal)) {
                     validationLabel.setText("✓ Valid");
                     validationLabel.setTextFill(Color.GREEN);
@@ -148,7 +150,7 @@ public class GUI extends Application {
         dateField.setPromptText("e.g. 6-3-2026");
         dateField.setMaxWidth(200);
 
-        // Emission type ComboBox (as required by the assignment)
+        // Emission type ComboBox 
         typeCombo = new ComboBox<String>();
         typeCombo.getItems().addAll("Transportation", "Food", "Energy");
         typeCombo.setPromptText("Select Emission Type");
@@ -160,8 +162,7 @@ public class GUI extends Application {
         // ChangeListener on typeCombo — shows the correct sub-fields
         typeCombo.valueProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> obs,
-                                String oldVal, String newVal) {
+            public void changed(ObservableValue<? extends String> obs, String oldVal, String newVal) {
                 updateDynamicFields(newVal);
             }
         });
@@ -190,23 +191,15 @@ public class GUI extends Application {
         HBox searchRow = new HBox(10, searchField, searchBtn);
         searchRow.setAlignment(Pos.CENTER_LEFT);
 
-        inputLayout.getChildren().addAll(
-            inputHeading,
-            makeRow("Source ID:", idRow),
-            makeRow("User Name:", userField),
-            makeRow("Date:",      dateField),
-            makeRow("Type:",      typeCombo),
-            dynamicFields,
-            feedbackLabel,
-            addBtn,
-            new Separator(),
-            searchHeading,
-            searchRow,
+        inputLayout.getChildren().addAll(inputHeading, makeRow("Source ID:", idRow),
+            makeRow("User Name:", userField),makeRow("Date:",dateField),
+            makeRow("Type:",typeCombo),dynamicFields, feedbackLabel,
+            addBtn, searchHeading, searchRow,
             new Label("Results:"),
             searchList
         );
 
-        // ── TAB 3: Carbon Offset ─────────────────────────────────
+        //TAB 3: Carbon Offset 
         VBox offsetLayout = new VBox(12);
         offsetLayout.setPadding(new Insets(20));
 
@@ -224,7 +217,7 @@ public class GUI extends Application {
         offsetUserField.setPromptText("Username to offset");
         offsetUserField.setMaxWidth(220);
 
-        // ComboBox for payment method (as required by assignment)
+        // ComboBox for payment method 
         paymentCombo = new ComboBox<String>();
         paymentCombo.getItems().addAll("Credit Card", "Digital Wallet", "Campus Card");
         paymentCombo.setPromptText("Select Payment Method");
@@ -248,27 +241,21 @@ public class GUI extends Application {
         receiptArea.setPrefRowCount(10);
         receiptArea.setFont(new Font("Courier New", 12));
 
-        // Offset History ListView (as required by assignment)
+        // Offset History ListView 
         Label histHeading = makeHeading("Offset History (this session):");
 
         offsetHistoryList = new ListView<String>();
         offsetHistoryList.setPrefHeight(130);
 
-        offsetLayout.getChildren().addAll(
-            offsetHeading,
-            totalEmissionsLabel,
-            makeRow("Username:",       offsetUserField),
+        offsetLayout.getChildren().addAll(offsetHeading,totalEmissionsLabel,
+            makeRow("Username:", offsetUserField),
             makeRow("Payment Method:", paymentCombo),
-            rateNote,
-            buyBtn,
-            processingLabel,
-            new Label("Receipt:"),
-            receiptArea,
-            histHeading,
+            rateNote,buyBtn,processingLabel,
+            new Label("Receipt:"),receiptArea,histHeading,
             offsetHistoryList
         );
 
-        // ── Assemble tabs ────────────────────────────────────────
+        //Assesble tabs
         TabPane tabPane = new TabPane();
 
         Tab dashTab   = new Tab("Live Dashboard");
@@ -300,20 +287,32 @@ public class GUI extends Application {
         stage.show();
 
         refreshDashboard();
+        totalEmissionsLabel.setText(String.format("Current Total: %.2f kg CO2", tracker.getTotalEmissions()));
+
     }
 
+    /**
+     * Reloads all emission cards on the dashboard from tracker entries
+     * and refreshes summary metrics.
+     */
     private void refreshDashboard() {
         dashboardGrid.getChildren().clear();
         for (EmissionSource e : tracker.getEntries()) dashboardGrid.getChildren().add(buildCard(e));
         updateSummaryBar();
     }
 
+    /**
+     * Creates a colored label card representing an emission entry.
+     *
+     * @param entry emission entry model
+     * @return label node for display in dashboard grid
+     */
     private Label buildCard(EmissionSource entry) {
         double val = entry.calculateEmission();
 
         Color bg = val < 1.0 ? Color.GREEN : val <= 3.0 ? Color.YELLOW : Color.RED;
 
-        Label card = new Label(entry.getSourceID() + "\n" + String.format("%.2f", val) + " kg CO2");
+        Label card = new Label(entry.getSourceID() + "\n" +  val + " kg CO2");
         card.setPrefSize(95, 68);
         card.setAlignment(Pos.CENTER);
         card.setFont(new Font("Arial", 11));
@@ -323,7 +322,7 @@ public class GUI extends Application {
         card.setBorder(new Border(new BorderStroke(
             Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(6), BorderStroke.THIN)));
 
-        // Click → show full toString()
+        // Click - show full toString()
 
         card.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -331,17 +330,23 @@ public class GUI extends Application {
                 detailLabel.setText(entry.toString());
             }
         });
-
-
         return card;
     }
 
-    private void updateSummaryBar() {
+    /**
+     * Updates the top summary bar with current totals and top contributor.
+     */
+    private void updateSummaryBar() { 
         summaryLabel.setText(String.format(
             "Total Entries: %d  |  Total CO2: %.2f kg  |  Top Emitter: %s",
             tracker.getEntries().size(), tracker.getTotalEmissions(), getTopEmitter()));
     }
 
+    /**
+     * Determines the user with the highest total emissions.
+     *
+     * @return username of the top emitter, or "N/A" if none
+     */
     private String getTopEmitter() {
         String topUser  = "N/A";
         double topTotal = -1;
@@ -352,11 +357,16 @@ public class GUI extends Application {
         return topUser;
     }
 
-    // Swaps dynamic fields — always the same pattern: ComboBox (string) then TextField (number)
+    /**
+     * Updates the form section that is displayed for the selected emission type.
+     *
+     * @param type selected emission type, e.g. "Transportation", "Food", "Energy"
+     */
+    // always the same pattern: ComboBox (string) then TextField (number)
     private void updateDynamicFields(String type) {
         dynamicFields.getChildren().clear();
         if (type == null) return;
-        dynamicCombo       = new ComboBox<String>();
+        dynamicCombo = new ComboBox<String>();
         dynamicNumberField = new TextField();
         dynamicCombo.setMaxWidth(200);
         dynamicNumberField.setMaxWidth(200);
@@ -366,16 +376,15 @@ public class GUI extends Application {
             dynamicCombo.setPromptText("Select Mode");
             dynamicNumberField.setPromptText("Distance in km");
             dynamicFields.getChildren().addAll(
-                makeRow("Mode:",          dynamicCombo),
+                makeRow("Mode:", dynamicCombo),
                 makeRow("Distance (km):", dynamicNumberField));
 
         } else if (type.equals("Energy")) {
-            dynamicCombo.getItems().addAll(
-                "Grid", "Solar", "Wind", "Coal", "Natural Gas", "Nuclear", "Diesel", "Hydro");
+            dynamicCombo.getItems().addAll("Grid", "Solar", "Wind", "Coal", "Natural Gas", "Nuclear", "Diesel", "Hydro");
             dynamicCombo.setPromptText("Select Source");
             dynamicNumberField.setPromptText("kWh consumed");
             dynamicFields.getChildren().addAll(
-                makeRow("Source:",   dynamicCombo),
+                makeRow("Source:",dynamicCombo),
                 makeRow("kWh Used:", dynamicNumberField));
 
         } else if (type.equals("Food")) {
@@ -383,17 +392,28 @@ public class GUI extends Application {
             dynamicCombo.setPromptText("Select Meal Type");
             dynamicNumberField.setPromptText("Number of meals");
             dynamicFields.getChildren().addAll(
-                makeRow("Meal Type:",   dynamicCombo),
-                makeRow("# of Meals:", dynamicNumberField));
+                makeRow("Meal Type:", dynamicCombo),
+                makeRow("No. of Meals:", dynamicNumberField));
         }
     }
 
+    /**
+     * Event handler for adding a new entry to the emission tracker.
+     *
+     * Performs input validation, model creation, persistence update, and UI refresh.
+     */
     private class AddEntryEvent implements EventHandler<ActionEvent> {
+        /**
+         * Handle click of "Add Entry" button. Validates user input, creates
+         * the corresponding EmissionSource, updates state, and refreshes the UI.
+         *
+         * @param event action event triggered by button press
+         */
         @Override
         public void handle(ActionEvent event) {
             feedbackLabel.setTextFill(Color.RED);
 
-            String id   = idField.getText().trim();
+            String id = idField.getText().trim();
             String user = userField.getText().trim();
             String date = dateField.getText().trim();
             String type = typeCombo.getValue();
@@ -419,7 +439,7 @@ public class GUI extends Application {
                 return;
             }
 
-            // Both shared fields used for every type: dynamicCombo = string, dynamicNumberField = number
+            // Both shared fields used for every type
             if (dynamicCombo.getValue() == null) {
                 feedbackLabel.setText("✗ Please select an option.");
                 return;
@@ -464,7 +484,16 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Event handler for searching entries by username and displaying matches.
+     */
     private class SearchEvent implements EventHandler<ActionEvent> {
+        /**
+         * Handle click of "Search" button. Searches entries by username and
+         * updates result list with matching entries or no-result message.
+         *
+         * @param event action event triggered by button press
+         */
         @Override
         public void handle(ActionEvent event) {
             searchList.getItems().clear();
@@ -492,15 +521,28 @@ public class GUI extends Application {
     }
 
 
+    /**
+     * Event handler for processing an offset purchase transaction with simulated delay.
+     */
     private class PurchaseOffsetEvent implements EventHandler<ActionEvent> {
         private final Button buyBtn;
         private final Label  processingLabel;
 
+        /**
+         * @param buyBtn button used to trigger purchase
+         * @param processingLabel label used to show processing state
+         */
         public PurchaseOffsetEvent(Button buyBtn, Label processingLabel) {
-            this.buyBtn          = buyBtn;
+            this.buyBtn= buyBtn;
             this.processingLabel = processingLabel;
         }
 
+        /**
+         * Handle click of "Purchase Offset" button. Validates user/payment,
+         * performs simulated offset transaction, logs activity, and updates UI.
+         *
+         * @param event action event triggered by button press
+         */
         @Override
         public void handle(ActionEvent event) {
             String user    = offsetUserField.getText().trim();
@@ -508,17 +550,16 @@ public class GUI extends Application {
 
             if (user.isEmpty()) {
                 receiptArea.setText("Please enter a username.");
-                return;
+               
             }
             if (payment == null) {
                 receiptArea.setText("Please select a payment method.");
-                return;
+                
             }
 
             buyBtn.setDisable(true);
             processingLabel.setText("Processing transaction... please wait 2 seconds.");
 
-            // PauseTransition — NOT Thread.sleep() as required by assignment
             PauseTransition pause = new PauseTransition(Duration.seconds(2));
             pause.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
@@ -526,8 +567,7 @@ public class GUI extends Application {
                     String receipt = transactionHandler.CalculateOffSet(user, payment);
                     receiptArea.setText(receipt);
 
-                    Logger.log(Logger.Operation.OFFSET_PURCHASED,
-                        "User: " + user + " | Payment: " + payment);
+                    Logger.log(Logger.Operation.OFFSET_PURCHASED,"User: " + user + " | Payment: " + payment);
 
                     // Add to offset history ListView
                     String summary = LocalDateTime.now()
@@ -544,10 +584,11 @@ public class GUI extends Application {
     }
 
 
-    // =============================================================
-    // STATE PERSISTENCE
-    // =============================================================
+    //loging offset puchase state in log file 
 
+    /**
+     * Loads saved state entries from local file storage into the in-memory tracker.
+     */
     private void loadState() {
         File file = new File(STATE_FILE);
         if (!file.exists()) return;
@@ -573,6 +614,11 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Appends a single entry line to the persistent state file.
+     *
+     * @param line formatted entry data in the pipe-separated state format
+     */
     // Appends a single new entry line to the state file — called immediately after entry creation
     // Line is built from user-entered values directly, no getters needed
     private void appendStateLine(String line) {
@@ -584,24 +630,36 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Parses a saved state line into the corresponding EmissionSource object.
+     *
+     * @param line saved state text line
+     * @return Deserialized EmissionSource object, or null if parsing failed
+     */
     // p[0]=category  p[1]=id  p[2]=date  p[3]=user  p[4]=stringVal  p[5]=numVal
     private EmissionSource fromStateLine(String line) {
         try {
             String[] p = line.split("\\|");
             double numVal = Double.parseDouble(p[5]);
             if (p[0].equals("Transportation")) return new TransportationEmission(p[1], p[0], p[2], p[3], numVal, p[4]);
-            if (p[0].equals("Energy"))         return new EnergyEmission(p[1], p[0], p[2], p[3], numVal, p[4]);
-            if (p[0].equals("Food"))           return new FoodEmission(p[1], p[0], p[2], p[3], p[4], (int) numVal);
+            if (p[0].equals("Energy")) return new EnergyEmission(p[1], p[0], p[2], p[3], numVal, p[4]);
+            if (p[0].equals("Food")) return new FoodEmission(p[1], p[0], p[2], p[3], p[4], (int) numVal);
         } catch (Exception e) {
             System.err.println("Could not parse state line: " + line);
         }
         return null;
     }
 
-    // =============================================================
-    // UTILITY HELPERS  (same pattern as makeLabel in GUI1.java)
-    // =============================================================
 
+    // formating helpers formating helpers  
+   
+
+    /**
+     * Creates a standardized heading label used across tabs.
+     *
+     * @param text heading text
+     * @return configured label instance
+     */
     private Label makeHeading(String text) {
         Label l = new Label(text);
         l.setFont(new Font("Arial", 16));
@@ -611,6 +669,13 @@ public class GUI extends Application {
 
 
 
+    /**
+     * Creates a button with standardized style used in the GUI.
+     *
+     * @param text button label
+     * @param bg background color of the button
+     * @return styled button instance
+     */
     private Button makeButton(String text, Color bg) {
         Button btn = new Button(text);
         btn.setFont(new Font("Arial", 13));
@@ -621,6 +686,13 @@ public class GUI extends Application {
         return btn;
     }
 
+    /**
+     * Wraps a label and input control in a consistent HBox row style.
+     *
+     * @param labelText row label text
+     * @param control node to display to the right of the label
+     * @return styled HBox container
+     */
     private HBox makeRow(String labelText, Node control) {
         Label lbl = new Label(labelText);
         lbl.setMinWidth(140);
@@ -630,6 +702,11 @@ public class GUI extends Application {
         return row;
     }
 
+    /**
+     * Application launcher.
+     *
+     * @param args command line arguments (ignored)
+     */
     public static void main(String[] args) {
         launch(args);
     }
