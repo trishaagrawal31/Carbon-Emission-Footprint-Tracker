@@ -1,7 +1,13 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.AI;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import ZeroCarbonFootprintTracker.EmissionSource;
+import ZeroCarbonFootprintTracker.EnergyEmission;
+import ZeroCarbonFootprintTracker.FoodEmission;
+import ZeroCarbonFootprintTracker.FootprintTracker;
+import ZeroCarbonFootprintTracker.TransportationEmission;
 
 public class PersistenceManager {
     private static final String FILE_PATH = "greenprint_state.txt";
