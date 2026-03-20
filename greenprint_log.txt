@@ -72,3 +72,5 @@
 2026-03-20 11:58:06 | STATE_LOADED | Restored 10 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-20 12:00:51 | ENTRY_ADDED | X-001 | Transportation | 20-12-2021 | Greg | car, 9.0 km | 1.53 kg CO2
 2026-03-20 12:01:15 | OFFSET_PURCHASED | User: Greg | Payment: Campus Card
+2026-03-20 12:10:06 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-20 12:15:52 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt

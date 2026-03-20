@@ -51,8 +51,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class GUI extends Application {
 
-    private static final DateTimeFormatter DATE_FMT  = DateTimeFormatter.ofPattern("d-M-yyyy");
-    private static final String STATE_FILE = "./ZeroCarbonFootprintTracker/greenprint_state.txt"; 
+    public static final DateTimeFormatter DATE_FMT  = DateTimeFormatter.ofPattern("d-M-yyyy");
+    public static final String STATE_FILE = "./ZeroCarbonFootprintTracker/greenprint_state.txt"; 
     private FootprintTracker   tracker  = new FootprintTracker("RIT GreenPrint 2026");
     private TransactionHandler transactionHandler = new TransactionHandler(tracker);
 
@@ -159,7 +159,7 @@ public class GUI extends Application {
         // Container that swaps content when type changes
         dynamicFields = new VBox(10);
 
-        // ChangeListener on typeCombo — shows the correct sub-fields
+        // ChangeListener on typeCombo-shows the correct sub-fields
         typeCombo.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> obs, String oldVal, String newVal) {
@@ -255,7 +255,7 @@ public class GUI extends Application {
             offsetHistoryList
         );
 
-        //Assesble tabs
+        //Assemble tabs
         TabPane tabPane = new TabPane();
 
         Tab dashTab   = new Tab("Live Dashboard");
@@ -312,7 +312,7 @@ public class GUI extends Application {
 
         Color bg = val < 1.0 ? Color.GREEN : val <= 3.0 ? Color.YELLOW : Color.RED;
 
-        Label card = new Label(entry.getSourceID() + "\n" +  val + " kg CO2");
+        Label card = new Label(entry.getSourceID() + "\n" +  String.format("%.2f", val) + " kg CO2");
         card.setPrefSize(95, 68);
         card.setAlignment(Pos.CENTER);
         card.setFont(new Font("Arial", 11));

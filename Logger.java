@@ -9,16 +9,13 @@ import java.time.format.DateTimeFormatter;
  * Utility class for appending timestamped operation logs to greenprint_log.txt.
  * Each log entry includes the timestamp, operation type, and relevant details.
  */
-/**
- * Utility class for appending timestamped operation logs to greenprint_log.txt.
- * Each log entry includes an operation type, details, and a formatted timestamp.
- */
+
 public class Logger {
 
     public enum Operation { ENTRY_ADDED, OFFSET_PURCHASED, STATE_SAVED, STATE_LOADED }
 
-    // relative path (current working directory) 
-    private static final String LOG_FILE = "./ZeroCarbonFootprintTracker/greenprint_log.txt";  // writes to whichever directory the JVM is started in
+    // relative path
+    public static final String LOG_FILE = "./ZeroCarbonFootprintTracker/greenprint_log.txt";  // writes to whichever directory the JVM is started in
 
     public static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
