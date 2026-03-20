@@ -7,6 +7,6 @@ Transportation|Q-001|19-3-2026|Aaliya|cycle|22.0
 Food|R-001|4-2-2023|Sadaf|poultry|1.0
 Energy|F-001|3-2-2018|Trisha|natural gas|5.0
 Transportation|Z-001|3-2-2093|Zainab|car|17.0
-Energy|D-001|2-4-2027|Danillo|wind|42.0
+Energy|D-001|2-4-2027|Danilo|wind|42.0
 Food|K-001|20-03-2016|Urooj|poultry|4.0
 Transportation|X-001|20-12-2021|Greg|car|9.0
