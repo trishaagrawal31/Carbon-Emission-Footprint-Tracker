@@ -67,7 +67,7 @@
 2026-03-19 21:29:02 | ENTRY_ADDED | R-001 | Food | 4-2-2023 | Sadaf | poultry, 1 meals | 1.82 kg CO2
 2026-03-19 21:29:30 | ENTRY_ADDED | F-001 | Energy | 3-2-2018 | Trisha | natural gas, 5.0 kWh | 1.55 kg CO2
 2026-03-19 21:30:14 | ENTRY_ADDED | Z-001 | Transportation | 3-2-2093 | Zainab | car, 17.0 km | 2.89 kg CO2
-2026-03-19 21:31:15 | ENTRY_ADDED | D-001 | Energy | 2-4-2027 | Danillo | wind, 42.0 kWh | 0.46 kg CO2
+2026-03-19 21:31:15 | ENTRY_ADDED | D-001 | Energy | 2-4-2027 | Danilo | wind, 42.0 kWh | 0.46 kg CO2
 2026-03-19 21:32:10 | ENTRY_ADDED | K-001 | Food | 20-03-2016 | Urooj | poultry, 4 meals | 7.28 kg CO2
 2026-03-20 11:58:06 | STATE_LOADED | Restored 10 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-20 12:00:51 | ENTRY_ADDED | X-001 | Transportation | 20-12-2021 | Greg | car, 9.0 km | 1.53 kg CO2
