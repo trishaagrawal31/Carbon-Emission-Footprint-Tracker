@@ -52,15 +52,23 @@
 2026-03-07 17:45:10 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-07 22:37:42 | ENTRY_ADDED | T-001 | Transportation | 2-3-2029 | bob | bus, 23.0 km | 2.23 kg CO2
 2026-03-08 00:27:52 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-16 07:34:34 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-16 07:38:12 | OFFSET_PURCHASED | User: bob | Payment: Credit Card
-2026-03-18 21:27:57 | STATE_SAVED | 1 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:55:42 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:55:50 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:55:58 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:56:10 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:57:44 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:58:13 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:58:21 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 07:59:53 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
-2026-03-19 08:00:04 | STATE_SAVED | 0 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 19:23:40 | STATE_LOADED | Restored 1 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 19:25:17 | ENTRY_ADDED | J-001 | Food | 6-2-2026 | Alice | vegetarian, 2 meals | 1.60 kg CO2
+2026-03-19 19:26:22 | OFFSET_PURCHASED | User: alice | Payment: Credit Card
+2026-03-19 19:26:43 | OFFSET_PURCHASED | User: ALice | Payment: Credit Card
+2026-03-19 19:29:23 | ENTRY_ADDED | Y-003 | Transportation | 12-6-2028 | Ken | car, 67.0 km | 11.39 kg CO2
+2026-03-19 19:30:01 | OFFSET_PURCHASED | User: Ken | Payment: Campus Card
+2026-03-19 20:15:53 | STATE_LOADED | Restored 3 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 20:21:53 | OFFSET_PURCHASED | User: Alice | Payment: Digital Wallet
+2026-03-19 21:21:55 | STATE_LOADED | Restored 3 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-19 21:23:07 | OFFSET_PURCHASED | User: Alice | Payment: Digital Wallet
+2026-03-19 21:27:28 | ENTRY_ADDED | A-001 | Transportation | 3-2-2012 | Adira | car, 34.0 km | 5.78 kg CO2
+2026-03-19 21:28:11 | ENTRY_ADDED | Q-001 | Transportation | 19-3-2026 | Aaliya | cycle, 22.0 km | 0.0 kg CO2
+2026-03-19 21:29:02 | ENTRY_ADDED | R-001 | Food | 4-2-2023 | Sadaf | poultry, 1 meals | 1.82 kg CO2
+2026-03-19 21:29:30 | ENTRY_ADDED | F-001 | Energy | 3-2-2018 | Trisha | natural gas, 5.0 kWh | 1.55 kg CO2
+2026-03-19 21:30:14 | ENTRY_ADDED | Z-001 | Transportation | 3-2-2093 | Zainab | car, 17.0 km | 2.89 kg CO2
+2026-03-19 21:31:15 | ENTRY_ADDED | D-001 | Energy | 2-4-2027 | Danillo | wind, 42.0 kWh | 0.46 kg CO2
+2026-03-19 21:32:10 | ENTRY_ADDED | K-001 | Food | 20-03-2016 | Urooj | poultry, 4 meals | 7.28 kg CO2
+2026-03-20 11:58:06 | STATE_LOADED | Restored 10 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-20 12:00:51 | ENTRY_ADDED | X-001 | Transportation | 20-12-2021 | Greg | car, 9.0 km | 1.53 kg CO2
+2026-03-20 12:01:15 | OFFSET_PURCHASED | User: Greg | Payment: Campus Card
