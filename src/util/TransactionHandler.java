@@ -25,7 +25,6 @@ public class TransactionHandler {
     /**
      * Calculates the offset cost for the given user, builds a receipt,
      * stores it in offset history, and returns it.
-     *
      * @param userName      the user whose emissions should be offset
      * @param paymentMethod the payment method chosen by the user
      * @return formatted receipt string, or an error message if no emissions found

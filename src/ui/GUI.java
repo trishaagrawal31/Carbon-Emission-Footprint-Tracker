@@ -108,7 +108,7 @@ public class GUI extends Application {
         dashboardGrid = new FlowPane(10, 10);
         dashboardGrid.setPadding(new Insets(10));
         ScrollPane gridScroll = new ScrollPane(dashboardGrid);
-        gridScroll.setPrefHeight(360);
+        gridScroll.setFitToWidth(true);
 
         detailLabel = new Label("Click a card above to see its full details.");
         detailLabel.setFont(new Font("Arial", 12));
@@ -312,10 +312,10 @@ public class GUI extends Application {
 
     /**
      * Creates a colored label card representing an emission entry.
-     *
      * @param entry emission entry model
      * @return label node for display in dashboard grid
      */
+    
     private Label buildCard(EmissionSource entry) {
         double val = entry.calculateEmission();
 
