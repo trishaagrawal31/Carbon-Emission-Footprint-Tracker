@@ -10,11 +10,11 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.time.LocalDate;
 
-import ZeroCarbonFootprintTracker.EmissionSource;
-import ZeroCarbonFootprintTracker.EnergyEmission;
-import ZeroCarbonFootprintTracker.FoodEmission;
-import ZeroCarbonFootprintTracker.FootprintTracker;
-import ZeroCarbonFootprintTracker.TransportationEmission;
+import ZeroCarbonFootprintTracker.src.model.EmissionSource;
+import ZeroCarbonFootprintTracker.src.model.EnergyEmission;
+import ZeroCarbonFootprintTracker.src.model.FoodEmission;
+import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
+import ZeroCarbonFootprintTracker.src.model.TransportationEmission;
 
 public class AI_GUI extends Application {
     private FootprintTracker tracker = new FootprintTracker("GreenPrint");

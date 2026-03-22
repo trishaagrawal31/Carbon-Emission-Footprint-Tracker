@@ -3,14 +3,14 @@ package ZeroCarbonFootprintTracker.AI;
 import java.io.*;
 import java.util.ArrayList;
 
-import ZeroCarbonFootprintTracker.EmissionSource;
-import ZeroCarbonFootprintTracker.EnergyEmission;
-import ZeroCarbonFootprintTracker.FoodEmission;
-import ZeroCarbonFootprintTracker.FootprintTracker;
-import ZeroCarbonFootprintTracker.TransportationEmission;
+import ZeroCarbonFootprintTracker.src.model.EmissionSource;
+import ZeroCarbonFootprintTracker.src.model.EnergyEmission;
+import ZeroCarbonFootprintTracker.src.model.FoodEmission;
+import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
+import ZeroCarbonFootprintTracker.src.model.TransportationEmission;
 
 public class PersistenceManager {
-    private static final String FILE_PATH = "greenprint_state.txt";
+    private static final String FILE_PATH = "./ZeroCarbonFootprintTracker/AI/greenprint_state.txt";
 
     public static void saveState(ArrayList<EmissionSource> entries) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {

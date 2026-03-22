@@ -1,5 +1,6 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.util;
 import java.time.LocalDateTime;
+import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
 
 /**
  * Handles carbon offset purchase transactions for the GreenPrint system.

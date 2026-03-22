@@ -1,0 +1,1 @@
+EnergyEmission,ID-8948,Energy:tt,2026-03-22,t,12.00,wind

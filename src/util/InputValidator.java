@@ -1,5 +1,8 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.util;
 import java.util.regex.Pattern;
+
+import ZeroCarbonFootprintTracker.src.model.EmissionSource;
+import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
 
 /**
  * Helper class for validating user input values in the tracker UI.

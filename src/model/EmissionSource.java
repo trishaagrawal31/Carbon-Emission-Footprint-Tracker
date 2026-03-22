@@ -1,4 +1,4 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.model;
 /**
 Represents a general emission source in the carbon footprint tracking system.
 

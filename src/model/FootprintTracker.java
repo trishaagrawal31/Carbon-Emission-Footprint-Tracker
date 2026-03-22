@@ -1,4 +1,4 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 

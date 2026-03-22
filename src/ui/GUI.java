@@ -1,4 +1,4 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.ui;
 import javafx.application.Application;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
@@ -43,6 +43,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import ZeroCarbonFootprintTracker.src.model.EmissionSource;
+import ZeroCarbonFootprintTracker.src.model.EnergyEmission;
+import ZeroCarbonFootprintTracker.src.model.FoodEmission;
+import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
+import ZeroCarbonFootprintTracker.src.model.TransportationEmission;
+import ZeroCarbonFootprintTracker.src.util.InputValidator;
+import ZeroCarbonFootprintTracker.src.util.Logger;
+import ZeroCarbonFootprintTracker.src.util.TransactionHandler;
+
+
 /**
  * GUI for the ZeroCarbonFootprintTracker.
  * The GUI supports three tabs: live dashboard, input and operations, 
@@ -79,7 +89,6 @@ public class GUI extends Application {
     @Override
     /**
      * Initializes UI components, loads persisted state entries, and configures event handlers for dashboard interactions.
-     *
      * @param stage primary stage provided by the JavaFX runtime
      */
     public void start(Stage stage) {
@@ -619,8 +628,7 @@ public class GUI extends Application {
      *
      * @param line formatted entry data in the pipe-separated state format
      */
-    // Appends a single new entry line to the state file — called immediately after entry creation
-    // Line is built from user-entered values directly, no getters needed
+
     private void appendStateLine(String line) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(STATE_FILE, true))) {
             writer.write(line);
@@ -651,7 +659,7 @@ public class GUI extends Application {
     }
 
 
-    // formating helpers formating helpers  
+    // formating helpers
    
 
     /**
@@ -703,8 +711,7 @@ public class GUI extends Application {
     }
 
     /**
-     * Application launcher.
-     *
+     * Application launcher
      * @param args command line arguments (ignored)
      */
     public static void main(String[] args) {
