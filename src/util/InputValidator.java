@@ -6,6 +6,7 @@ import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
 
 /**
  * Helper class for validating user input values in the tracker UI.
+ * @author Zainab
  */
 public class InputValidator {
 

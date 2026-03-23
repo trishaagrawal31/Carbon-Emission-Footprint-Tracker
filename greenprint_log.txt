@@ -83,3 +83,5 @@
 2026-03-22 10:57:41 | OFFSET_PURCHASED | User: danilo | Payment: Credit Card
 2026-03-22 11:07:13 | STATE_SAVED | 11 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-22 11:07:17 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-22 19:31:48 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-22 19:31:59 | STATE_SAVED | 11 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt

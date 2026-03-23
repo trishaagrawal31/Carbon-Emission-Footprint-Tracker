@@ -4,7 +4,8 @@ import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
 
 /**
  * Handles carbon offset purchase transactions for the GreenPrint system.
- * Rate: $15 per 1 000 kg CO2 = $0.015 per kg CO2.
+ * 
+ * @author Sadaf
  */
 public class TransactionHandler {
 

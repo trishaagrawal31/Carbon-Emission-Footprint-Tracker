@@ -58,6 +58,7 @@ import ZeroCarbonFootprintTracker.src.util.TransactionHandler;
  * The GUI supports three tabs: live dashboard, input and operations, 
  * and carbon offset market. It manages state persistence, entry
  * validation, and transaction flow.
+ * @author Trisha and Aaliya
  */
 public class GUI extends Application {
 
@@ -67,23 +68,23 @@ public class GUI extends Application {
     private TransactionHandler transactionHandler = new TransactionHandler(tracker);
 
     private FlowPane dashboardGrid;
-    private Label    summaryLabel;
-    private Label    detailLabel;
-    private TextField        idField;
-    private Label            validationLabel;
-    private TextField        userField;
-    private TextField        dateField;
+    private Label summaryLabel;
+    private Label detailLabel;
+    private TextField idField;
+    private Label validationLabel;
+    private TextField userField;
+    private TextField dateField;
     private ComboBox<String> typeCombo;
-    private VBox             dynamicFields;
+    private VBox dynamicFields;
     private ComboBox<String> dynamicCombo;
-    private TextField        dynamicNumberField;
-    private Label            feedbackLabel;
-    private TextField        searchField;
+    private TextField dynamicNumberField;
+    private Label feedbackLabel;
+    private TextField searchField;
     private ListView<String> searchList;
-    private Label            totalEmissionsLabel;
-    private TextField        offsetUserField;
+    private Label totalEmissionsLabel;
+    private TextField offsetUserField;
     private ComboBox<String> paymentCombo;
-    private TextArea         receiptArea;
+    private TextArea receiptArea;
     private ListView<String> offsetHistoryList;
 
     @Override
