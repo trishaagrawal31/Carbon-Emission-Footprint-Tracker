@@ -382,7 +382,7 @@ public class GUI extends Application {
         dynamicNumberField.setMaxWidth(200);
 
         if (type.equals("Transportation")) {
-            dynamicCombo.getItems().addAll("Car", "Bus", "Train", "Bicycle");
+            dynamicCombo.getItems().addAll("Car", "Bus", "Train", "Cycle");
             dynamicCombo.setPromptText("Select Mode");
             dynamicNumberField.setPromptText("Distance in km");
             dynamicFields.getChildren().addAll(
@@ -466,7 +466,6 @@ public class GUI extends Application {
 
             EmissionSource entry;
             if (type.equals("Transportation")) {
-                if (stringVal.equals("bicycle")) stringVal = "cycle";
                 entry = new TransportationEmission(id, "Transportation", date, user, numVal, stringVal);
             } else if (type.equals("Energy")) {
                 entry = new EnergyEmission(id, "Energy", date, user, numVal, stringVal);
