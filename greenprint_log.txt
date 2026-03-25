@@ -92,3 +92,11 @@
 2026-03-25 12:14:51 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-25 13:11:50 | STATE_SAVED | 11 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-25 14:01:18 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-25 14:17:34 | STATE_SAVED | 11 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-25 14:17:43 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-25 14:37:29 | STATE_SAVED | 11 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-25 14:37:40 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-25 14:43:57 | OFFSET_PURCHASED | User: trisha | Payment: null
+2026-03-25 14:44:04 | OFFSET_PURCHASED | User: trisha | Payment: Credit Card
+2026-03-25 14:48:34 | STATE_SAVED | 11 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-25 14:48:47 | STATE_LOADED | Restored 11 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
