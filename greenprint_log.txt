@@ -188,3 +188,6 @@
 2026-03-27 18:16:41 | OFFSET_PURCHASED | User: ken | Payment: Credit Card
 2026-03-27 18:18:29 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-27 18:18:46 | OFFSET_PURCHASED | User: ken | Payment: Digital Wallet
+2026-03-27 18:32:37 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-27 18:33:54 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-27 18:35:54 | OFFSET_PURCHASED | User: Alice | Payment: Digital Wallet

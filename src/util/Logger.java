@@ -13,28 +13,24 @@ import java.time.format.DateTimeFormatter;
 
 public class Logger {
 
-    public enum Operation { ENTRY_ADDED, OFFSET_PURCHASED, STATE_SAVED, STATE_LOADED }
-
-    // relative path
+    public enum Operation { ENTRY_ADDED,OFFSET_PURCHASED,STATE_SAVED,STATE_LOADED }
     public static final String LOG_FILE = "./ZeroCarbonFootprintTracker/greenprint_log.txt";  
 
-    public static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter FORMATTER =DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Writes a log message to the tracker log file.
-     *
      * @param operationType type of operation being logged
      * @param details      extra details to include in the log record
      */
-    public static void log(Operation operationType, String details) {
-        String timestamp = LocalDateTime.now().format(FORMATTER);
-        String logLine   = timestamp + " | " + operationType.name() + " | " + details;
+    public static void log(Operation operationType, String details){
+        String timestamp= LocalDateTime.now().format(FORMATTER);
+        String logLine=timestamp+" | "+operationType.name()+ " | "+ details;
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE, true))) {
+        try (BufferedWriter writer=new BufferedWriter(new FileWriter(LOG_FILE, true))){
             writer.write(logLine);
             writer.newLine();
-        } catch (IOException e) {
+        } catch (IOException e){
             System.err.println("Logger: Failed to write log entry to " + LOG_FILE + ": " + e.getMessage());
         }
     }
