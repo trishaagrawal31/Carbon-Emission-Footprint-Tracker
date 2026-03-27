@@ -9,3 +9,4 @@ Transportation|Z-001|3-2-2093|Zainab|car|17.0
 Energy|D-001|2-4-2027|Danilo|wind|42.0
 Food|K-001|20-03-2016|Urooj|poultry|4.0
 Transportation|X-001|20-12-2021|Greg|car|9.0
+Energy|W-009|2-4-2024|Tom|solar|12.0
