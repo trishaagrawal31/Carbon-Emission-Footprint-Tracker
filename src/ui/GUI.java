@@ -292,7 +292,7 @@ public class GUI extends Application {
      */
     private String getTopEmitter() {
         String topUser  = "N/A";
-        double topTotal = 0;
+        double topTotal = -1;
         for (EmissionSource e:tracker.getEntries()) {
             double t = tracker.getTotalEmissionsForUser(e.getUserName());
             if (t >topTotal) {topTotal=t; topUser = e.getUserName(); }

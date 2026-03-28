@@ -194,3 +194,7 @@
 2026-03-28 09:41:03 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-28 09:41:05 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-28 11:30:42 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 11:39:37 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 11:41:17 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 11:41:19 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 12:08:26 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
