@@ -618,7 +618,6 @@ public class GUI extends Application {
     private HBox makeRow(String labelText, Node control) {
         Label lbl=new Label(labelText);
         HBox row = new HBox(10, lbl, control);
-        row.setAlignment(Pos.CENTER_LEFT);
         return row;
     }
 
