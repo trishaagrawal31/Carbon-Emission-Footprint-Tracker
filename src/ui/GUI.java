@@ -362,8 +362,13 @@ public class GUI extends Application {
             }
             // Date validation with d-M-yyyy format
             try {
-                LocalDate.parse(date, DATE_FMT);
-            } catch (Exception dateEx) {
+                LocalDate parsed = LocalDate.parse(date, DATE_FMT);
+                int year = parsed.getYear();
+                if (year<1900||year>2026) {
+                        feedbackLabel.setText("✗ Year must be between 1900 and 2026.");
+                        return;
+                    }
+            } catch (Exception e) {
                 feedbackLabel.setText("✗ Date invalid. Use format d-M-yyyy e.g. 6-3-2026");
                 return;
             }
