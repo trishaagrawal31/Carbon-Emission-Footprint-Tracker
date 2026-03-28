@@ -81,7 +81,6 @@ public class GUI extends Application {
     private TextField searchField;
     private ListView<String> searchList;
     private Label totalEmissionsLabel;
-    private double updatedTotalEmissions;
     private TextField offsetUserField;
     private ComboBox<String> paymentCombo;
     private Label receiptArea;
