@@ -58,4 +58,25 @@ public class TransactionHandler {
                 + "Status         : CONFIRMED \n"
                 + "==================================";
     }
+    public String CalculateOffSetWithDiscount(String userName, String paymentMethod, int pct, double discountedEmission) {
+    double userEmissions = offsetTracker.getTotalEmissionsForUser(userName);
+    if (userEmissions <= 0) {
+        return "No emissions found for user \"" + userName + "\".\nPlease add emission entries first.";
+    }
+    double totalCost = discountedEmission * OFFSET_RATE;
+    String timestamp = LocalDateTime.now().format(Logger.FORMATTER);
+    return "====== Carbon Offset Receipt ======\n"
+            + "Date/Time      : " + timestamp + "\n"
+            + "User           : " + userName + "\n"
+            + "Original       : " + String.format("%.2f", userEmissions) + " kg CO2\n"
+            + "Discount       : " + pct + "%\n"
+            + "Adjusted       : " + String.format("%.2f", discountedEmission) + " kg CO2\n"
+            + "Rate           : $" + OFFSET_RATE + " per kg CO2\n"
+            + "Payment Method : " + paymentMethod + "\n"
+            + "----------------------------------\n"
+            + "Total Cost     : $" + String.format("%.2f", totalCost) + "\n"
+            + "Status         : CONFIRMED \n"
+            + "==================================";
+}
+
 }

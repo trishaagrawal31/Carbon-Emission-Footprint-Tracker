@@ -198,3 +198,290 @@
 2026-03-28 11:41:17 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-28 11:41:19 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
 2026-03-28 12:08:26 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 13:09:31 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 13:10:49 | ENTRY_ADDED | T-008 | Transportation | 2-7-2025 | Tom | bus, 13.0 km | 1.26 kg CO2
+2026-03-28 13:13:17 | ENTRY_ADDED | T-009 | Transportation | 6-6-2026 | Tom | bus, 12.0 km | 1.16 kg CO2
+2026-03-28 13:14:28 | OFFSET_PURCHASED | User: Tom | Payment: Campus Card
+2026-03-28 13:35:43 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 14:34:51 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-03-28 14:52:41 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 13:06:27 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 13:36:44 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 14:34:02 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 14:34:20 | OFFSET_PURCHASED | User: trisha | Payment: Credit Card
+2026-04-22 14:37:23 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 14:37:37 | OFFSET_PURCHASED | User: trisha | Payment: Credit Card
+2026-04-22 14:39:37 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 14:39:41 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 5% | Original: 39.44 | Discounted: 37.47
+2026-04-22 14:39:44 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 19% | Original: 39.44 | Discounted: 31.95
+2026-04-22 14:39:45 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 5% | Original: 39.44 | Discounted: 37.47
+2026-04-22 14:39:46 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 25% | Original: 39.44 | Discounted: 29.58
+2026-04-22 14:39:47 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 23% | Original: 39.44 | Discounted: 30.37
+2026-04-22 14:39:48 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 19% | Original: 39.44 | Discounted: 31.95
+2026-04-22 14:39:49 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 9% | Original: 39.44 | Discounted: 35.89
+2026-04-22 14:39:49 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 30% | Original: 39.44 | Discounted: 27.61
+2026-04-22 14:39:50 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 9% | Original: 39.44 | Discounted: 35.89
+2026-04-22 14:39:51 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 2% | Original: 39.44 | Discounted: 38.65
+2026-04-22 14:39:52 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 21% | Original: 39.44 | Discounted: 31.16
+2026-04-22 14:39:52 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 23% | Original: 39.44 | Discounted: 30.37
+2026-04-22 14:39:53 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 21% | Original: 39.44 | Discounted: 31.16
+2026-04-22 14:39:54 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 20% | Original: 39.44 | Discounted: 31.55
+2026-04-22 14:39:54 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 30% | Original: 39.44 | Discounted: 27.61
+2026-04-22 14:39:55 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 7% | Original: 39.44 | Discounted: 36.68
+2026-04-22 14:39:56 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 5% | Original: 39.44 | Discounted: 37.47
+2026-04-22 14:39:58 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 3% | Original: 39.44 | Discounted: 38.26
+2026-04-22 14:39:59 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 12% | Original: 39.44 | Discounted: 34.71
+2026-04-22 14:40:00 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 17% | Original: 39.44 | Discounted: 32.73
+2026-04-22 14:40:01 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 16% | Original: 39.44 | Discounted: 33.13
+2026-04-22 14:40:02 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 22% | Original: 39.44 | Discounted: 30.76
+2026-04-22 14:40:03 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 3% | Original: 39.44 | Discounted: 38.26
+2026-04-22 14:42:43 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 14:42:45 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 14:42:48 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 15:03:20 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 15:03:29 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 14% | Original: 39.44 | Discounted: 33.92
+2026-04-22 15:03:32 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 23% | Original: 39.44 | Discounted: 30.37
+2026-04-22 15:03:33 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 14% | Original: 39.44 | Discounted: 33.92
+2026-04-22 15:03:34 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 6% | Original: 39.44 | Discounted: 37.07
+2026-04-22 15:03:34 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 13% | Original: 39.44 | Discounted: 34.31
+2026-04-22 15:03:35 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 14% | Original: 39.44 | Discounted: 33.92
+2026-04-22 15:03:35 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 13% | Original: 39.44 | Discounted: 34.31
+2026-04-22 15:03:35 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 3% | Original: 39.44 | Discounted: 38.26
+2026-04-22 15:03:36 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 7% | Original: 39.44 | Discounted: 36.68
+2026-04-22 15:03:36 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 12% | Original: 39.44 | Discounted: 34.71
+2026-04-22 15:03:37 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 7% | Original: 39.44 | Discounted: 36.68
+2026-04-22 15:03:41 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 12% | Original: 39.44 | Discounted: 34.71
+2026-04-22 17:19:53 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 17:19:56 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 17:35:31 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 17:35:35 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 6% | Original: 39.44 | Discounted: 37.07
+2026-04-22 17:36:21 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 17:37:09 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 30% | Original: 39.44 | Discounted: 27.61
+2026-04-22 17:37:36 | OFFSET_PURCHASED | User: Trisha | Payment: Digital Wallet
+2026-04-22 17:37:55 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 6% | Original: 39.44 | Discounted: 37.07
+2026-04-22 17:37:56 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 7% | Original: 39.44 | Discounted: 36.68
+2026-04-22 17:38:04 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 19% | Original: 39.44 | Discounted: 31.95
+2026-04-22 17:38:04 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 6% | Original: 39.44 | Discounted: 37.07
+2026-04-22 17:38:05 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 17% | Original: 39.44 | Discounted: 32.73
+2026-04-22 17:38:05 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 30% | Original: 39.44 | Discounted: 27.61
+2026-04-22 17:38:05 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 18% | Original: 39.44 | Discounted: 32.34
+2026-04-22 17:38:06 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 4% | Original: 39.44 | Discounted: 37.86
+2026-04-22 17:38:06 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 3% | Original: 39.44 | Discounted: 38.26
+2026-04-22 17:38:06 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 13% | Original: 39.44 | Discounted: 34.31
+2026-04-22 17:38:07 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 21% | Original: 39.44 | Discounted: 31.16
+2026-04-22 19:23:27 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 19:23:47 | DISCOUNT_REQUESTED | User: trisha | 27% | Original: 1.55 | Discounted: 1.13
+2026-04-22 19:23:48 | DISCOUNT_REQUESTED | User: trisha | 24% | Original: 1.55 | Discounted: 1.18
+2026-04-22 19:23:48 | DISCOUNT_REQUESTED | User: trisha | 15% | Original: 1.55 | Discounted: 1.32
+2026-04-22 19:23:51 | DISCOUNT_REQUESTED | User: trisha | 3% | Original: 1.55 | Discounted: 1.50
+2026-04-22 19:23:52 | DISCOUNT_REQUESTED | User: trisha | 20% | Original: 1.55 | Discounted: 1.24
+2026-04-22 19:23:53 | DISCOUNT_REQUESTED | User: trisha | 13% | Original: 1.55 | Discounted: 1.35
+2026-04-22 19:23:54 | DISCOUNT_REQUESTED | User: trisha | 19% | Original: 1.55 | Discounted: 1.26
+2026-04-22 19:23:55 | DISCOUNT_REQUESTED | User: trisha | 3% | Original: 1.55 | Discounted: 1.50
+2026-04-22 19:23:56 | DISCOUNT_REQUESTED | User: trisha | 28% | Original: 1.55 | Discounted: 1.12
+2026-04-22 19:24:03 | DISCOUNT_REQUESTED | User: trisha | 10% | Original: 1.55 | Discounted: 1.40
+2026-04-22 19:24:07 | DISCOUNT_REQUESTED | User: trisha | 25% | Original: 1.55 | Discounted: 1.16
+2026-04-22 19:24:09 | DISCOUNT_REQUESTED | User: trisha | 4% | Original: 1.55 | Discounted: 1.49
+2026-04-22 19:24:10 | DISCOUNT_REQUESTED | User: trisha | 26% | Original: 1.55 | Discounted: 1.15
+2026-04-22 19:24:11 | DISCOUNT_REQUESTED | User: trisha | 22% | Original: 1.55 | Discounted: 1.21
+2026-04-22 19:24:11 | DISCOUNT_REQUESTED | User: trisha | 21% | Original: 1.55 | Discounted: 1.22
+2026-04-22 19:24:12 | DISCOUNT_REQUESTED | User: trisha | 23% | Original: 1.55 | Discounted: 1.19
+2026-04-22 19:24:12 | DISCOUNT_REQUESTED | User: trisha | 23% | Original: 1.55 | Discounted: 1.19
+2026-04-22 19:24:13 | DISCOUNT_REQUESTED | User: trisha | 21% | Original: 1.55 | Discounted: 1.22
+2026-04-22 19:24:13 | DISCOUNT_REQUESTED | User: trisha | 18% | Original: 1.55 | Discounted: 1.27
+2026-04-22 19:24:14 | DISCOUNT_REQUESTED | User: trisha | 2% | Original: 1.55 | Discounted: 1.52
+2026-04-22 19:24:14 | DISCOUNT_REQUESTED | User: trisha | 17% | Original: 1.55 | Discounted: 1.29
+2026-04-22 19:24:15 | DISCOUNT_REQUESTED | User: trisha | 21% | Original: 1.55 | Discounted: 1.22
+2026-04-22 19:24:16 | DISCOUNT_REQUESTED | User: trisha | 10% | Original: 1.55 | Discounted: 1.40
+2026-04-22 19:24:16 | DISCOUNT_REQUESTED | User: trisha | 4% | Original: 1.55 | Discounted: 1.49
+2026-04-22 19:24:17 | DISCOUNT_REQUESTED | User: trisha | 19% | Original: 1.55 | Discounted: 1.26
+2026-04-22 19:24:17 | DISCOUNT_REQUESTED | User: trisha | 1% | Original: 1.55 | Discounted: 1.53
+2026-04-22 19:24:18 | DISCOUNT_REQUESTED | User: trisha | 12% | Original: 1.55 | Discounted: 1.36
+2026-04-22 19:24:22 | OFFSET_PURCHASED | User: trisha | Payment: Credit Card
+2026-04-22 23:11:11 | DISCOUNT_REQUESTED | User: trisha | 2% | Original: 1.55 | Discounted: 1.52
+2026-04-22 23:11:11 | DISCOUNT_REQUESTED | User: trisha | 9% | Original: 1.55 | Discounted: 1.41
+2026-04-22 23:13:57 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:14:12 | DISCOUNT_REQUESTED | User: Trisha | 18% | Original: 1.55 | Discounted: 1.27
+2026-04-22 23:14:37 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:14:55 | DISCOUNT_REQUESTED | User: Trisha | 24% | Original: 1.55 | Discounted: 1.18
+2026-04-22 23:17:05 | OFFSET_PURCHASED | DISCOUNT_APPLIED | 13% | Original: 39.44 | Discounted: 34.31
+2026-04-22 23:17:09 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:17:12 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:17:14 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:17:21 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:17:24 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:55:27 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-22 23:55:51 | DISCOUNT_REQUESTED | User: Trisha | 29% | Original: 1.55 | Discounted: 1.10
+2026-04-22 23:56:01 | OFFSET_PURCHASED | User: Trisha | Payment: Digital Wallet
+2026-04-23 00:04:15 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:04:55 | DISCOUNT_REQUESTED | User: Trisha | 27% | Original: 1.55 | Discounted: 1.13
+2026-04-23 00:05:19 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:06:00 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:06:05 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:06:21 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:23:38 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:45:16 | OFFSET_PURCHASED | User: trisha | Payment: Digital Wallet
+2026-04-23 00:56:20 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:56:45 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:58:20 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 00:59:48 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:01:04 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:01:33 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:03:26 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:03:29 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:04:23 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:04:26 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:04:30 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:07:44 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:07:46 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:07:48 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:07:50 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:07:52 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:08:11 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:08:27 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:08:46 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:09:30 | DISCOUNT_REQUESTED | User: Trisha | 19% | Original: 1.55 | Discounted: 1.26
+2026-04-23 01:09:40 | OFFSET_PURCHASED | User: Trisha | Payment: Digital Wallet
+2026-04-23 01:11:16 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:16:08 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:16:37 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:16:51 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:26:18 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:26:46 | OFFSET_PURCHASED | User: trisha | Payment: Credit Card
+2026-04-23 01:32:08 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:32:34 | DISCOUNT_REQUESTED | User: Tom | 29% | Original: 2.91 | Discounted: 2.07
+2026-04-23 01:32:40 | OFFSET_PURCHASED | User: Tom | Payment: Credit Card
+2026-04-23 01:33:27 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:34:15 | DISCOUNT_REQUESTED | User: Trisha | 5% | Original: 1.55 | Discounted: 1.47
+2026-04-23 01:34:18 | OFFSET_PURCHASED | User: Trisha | Payment: Credit Card
+2026-04-23 01:34:31 | OFFSET_PURCHASED | User: Tom | Payment: Credit Card
+2026-04-23 01:47:50 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:47:52 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:47:55 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:47:58 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:00 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:03 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:06 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:08 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:11 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:13 | STATE_SAVED | 11 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:15 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-23 01:48:17 | STATE_SAVED | 10 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:10:19 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:13:17 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:23:10 | OFFSET_PURCHASED | User: TRisha | Payment: Digital Wallet
+2026-04-24 00:23:53 | OFFSET_PURCHASED | User: ken | Payment: Digital Wallet
+2026-04-24 00:24:08 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:24:20 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:25:04 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:25:38 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:26:05 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:26:17 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:26:23 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:26:25 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:26:27 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:26:30 | STATE_SAVED | 14 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:26:53 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:27:26 | DISCOUNT_REQUESTED | User: ken | 4% | Original: 11.39 | Discounted: 10.93
+2026-04-24 00:36:41 | OFFSET_PURCHASED | User: ken | Payment: Digital Wallet
+2026-04-24 00:56:44 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:58:16 | STATE_LOADED | Restored 14 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:58:48 | DISCOUNT_REQUESTED | User: Trisha | 24% | Original: 1.55 | Discounted: 1.18
+2026-04-24 00:58:57 | OFFSET_PURCHASED | User: Trisha | Payment: Digital Wallet
+2026-04-24 00:59:16 | OFFSET_PURCHASED | User: Ken | Payment: Digital Wallet
+2026-04-24 00:59:26 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 00:59:29 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 11:16:41 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 11:52:45 | ENTRY_ADDED | T-002 | Transportation | 2-3-2024 | 211 | car, 12.0 km | 2.04 kg CO2
+2026-04-24 12:35:29 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 12:36:11 | DISCOUNT_REQUESTED | User: urooj | 27% | Original: 7.28 | Discounted: 5.31
+2026-04-24 12:36:13 | DISCOUNT_REQUESTED | User: urooj | 21% | Original: 7.28 | Discounted: 5.75
+2026-04-24 12:36:14 | DISCOUNT_REQUESTED | User: urooj | 9% | Original: 7.28 | Discounted: 6.62
+2026-04-24 12:36:14 | DISCOUNT_REQUESTED | User: urooj | 5% | Original: 7.28 | Discounted: 6.92
+2026-04-24 12:36:15 | DISCOUNT_REQUESTED | User: urooj | 24% | Original: 7.28 | Discounted: 5.53
+2026-04-24 12:36:16 | DISCOUNT_REQUESTED | User: urooj | 29% | Original: 7.28 | Discounted: 5.17
+2026-04-24 15:09:27 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 15:09:41 | DISCOUNT_REQUESTED | User: Urooj | Pct: 2
+2026-04-24 15:10:51 | DISCOUNT_REQUESTED | User: adira | Pct: 27
+2026-04-24 15:11:06 | DISCOUNT_REQUESTED | User: urooj | Pct: 15
+2026-04-24 15:20:40 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 15:23:14 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 15:23:24 | DISCOUNT_REQUESTED | User: adira | Pct: 9
+2026-04-24 15:25:12 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 15:26:11 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 15:26:14 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:15:19 | DISCOUNT_REQUESTED | User: urooj | Pct: 2
+2026-04-24 17:17:58 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:18:01 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:18:04 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:18:05 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:18:07 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:18:08 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:18:10 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:18:38 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:20:35 | DISCOUNT_REQUESTED | User: urooj | Pct: 30
+2026-04-24 17:21:34 | DISCOUNT_REQUESTED | User: urooj | Pct: 9
+2026-04-24 17:21:51 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:21:59 | DISCOUNT_REQUESTED | User: urooj | Pct: 22
+2026-04-24 17:22:09 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:22:22 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:22:30 | DISCOUNT_REQUESTED | User: urooj | Pct: 3
+2026-04-24 17:25:19 | STATE_LOADED | Restored 13 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:25:37 | OFFSET_PURCHASED | User: urooj | Payment: Credit Card
+2026-04-24 17:27:09 | DISCOUNT_REQUESTED | User: adira | Pct: 29
+2026-04-24 17:28:32 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:54:53 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:55:30 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 17:55:32 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 18:01:53 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 18:01:55 | STATE_SAVED | 13 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 19:15:48 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 19:16:11 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 19:18:30 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 19:28:40 | DISCOUNT_REQUESTED | User: bob | Pct: 9
+2026-04-24 19:28:58 | DISCOUNT_REQUESTED | User: Sadaf | Pct: 24
+2026-04-24 22:23:11 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:23:38 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:25:50 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:31:07 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:32:10 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:32:13 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:32:15 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:32:16 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:32:18 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:32:24 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:43:39 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:47:26 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:50:56 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:51:50 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:51:51 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:52:59 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:53:39 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:54:26 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:54:41 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:56:27 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:57:32 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:58:05 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:06 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:25 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:27 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:29 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:31 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:33 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:35 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:38 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:43 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:46 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 22:59:50 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 23:08:55 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 23:31:57 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 23:31:58 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 23:32:00 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 23:33:35 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-24 23:33:38 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-25 00:50:34 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-25 00:51:02 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-25 00:56:04 | STATE_LOADED | Restored 12 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-25 00:58:18 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-25 00:58:51 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-25 00:58:52 | STATE_SAVED | 12 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt

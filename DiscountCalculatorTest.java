@@ -5,7 +5,7 @@ import org.junit.Test;
 public class DiscountCalculatorTest {
     @Test 
     //setup
-    void testThirtyCalculateDiscount() {
+    public void testThirtyCalculateDiscount() {
         double total = 100.0;
         int discount= 30;
         double expected = 70.0; 
@@ -15,7 +15,7 @@ public class DiscountCalculatorTest {
         assertEquals(expected, price, 0.001);}
     
     @Test
-    void testCalculateDiscount() {
+    public void testCalculateDiscount() {
         double total = 100.0;
         int discount= 0;
         double expected = 100.0; 
@@ -25,7 +25,7 @@ public class DiscountCalculatorTest {
         assertEquals(expected, price, 0.001);}
     
     @Test
-    void test100CalculateDiscount() {
+    public void test100CalculateDiscount() {
         double total = 100.0;
         int discount= 100;
         double expected = 0.0; 
@@ -35,7 +35,7 @@ public class DiscountCalculatorTest {
         assertEquals(expected, price, 0.001);}
     
     @Test
-    void test1CalculateDiscount() {
+    public void test1CalculateDiscount() {
         double total = 100.0;
         int discount= 1;
         double expected = 99.0; 
@@ -45,7 +45,7 @@ public class DiscountCalculatorTest {
         assertEquals(expected, price, 0.001);}
     
     @Test
-    void testNegativeCalculateDiscount(){
+    public void testNegativeCalculateDiscount(){
         double total = 100.0;
         int discount= -1;
         //invoke 

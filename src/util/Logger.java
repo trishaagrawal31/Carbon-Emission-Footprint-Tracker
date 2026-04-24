@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Logger {
 
-    public enum Operation { ENTRY_ADDED,OFFSET_PURCHASED,STATE_SAVED,STATE_LOADED }
+    public enum Operation { ENTRY_ADDED,OFFSET_PURCHASED,STATE_SAVED,STATE_LOADED, DISCOUNT_REQUESTED }
     public static final String LOG_FILE = "./ZeroCarbonFootprintTracker/greenprint_log.txt";  
 
     public static final DateTimeFormatter FORMATTER =DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

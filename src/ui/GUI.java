@@ -32,15 +32,18 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.io.*;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import javafx.application.Platform;
 
 import ZeroCarbonFootprintTracker.src.model.EmissionSource;
 import ZeroCarbonFootprintTracker.src.model.EnergyEmission;
@@ -50,6 +53,12 @@ import ZeroCarbonFootprintTracker.src.model.TransportationEmission;
 import ZeroCarbonFootprintTracker.src.util.InputValidator;
 import ZeroCarbonFootprintTracker.src.util.Logger;
 import ZeroCarbonFootprintTracker.src.util.TransactionHandler;
+import ZeroCarbonFootprintTracker.ConnectionConfig;
+import java.net.ConnectException;
+import ZeroCarbonFootprintTracker.ResponseParser;
+
+import ZeroCarbonFootprintTracker.DiscountCalculator;
+
 
 
 /**
@@ -66,6 +75,7 @@ public class GUI extends Application {
     private FootprintTracker tracker = new FootprintTracker("RIT GreenPrint 2026");
     private TransactionHandler transactionHandler = new TransactionHandler(tracker);
 
+    
     private FlowPane dashboardGrid;
     private Label summaryLabel;
     private Label detailLabel;
@@ -85,6 +95,13 @@ public class GUI extends Application {
     private ComboBox<String> paymentCombo;
     private Label receiptArea;
     private ListView<String> offsetHistoryList;
+    private Button requestDiscountBtn;
+    private Label discountResultLabel;
+    private Label discountErrorLabel;
+    private java.util.Map<String, Integer> userDiscountPctMap = new java.util.HashMap<>();
+    private java.util.Map<String, Double> userDiscountedValueMap = new java.util.HashMap<>();
+    private VBox leaderboardBox;
+    private ComboBox<String> ImpactCombo;
 
     @Override
     /**
@@ -93,6 +110,9 @@ public class GUI extends Application {
      */
     public void start(Stage stage) {
         loadState();
+        
+        String cssPath = getClass().getResource("primer-dark.css").toExternalForm();
+        Application.setUserAgentStylesheet(cssPath);
 
         //TAB 1
         VBox dashLayout = new VBox(10);
@@ -101,12 +121,12 @@ public class GUI extends Application {
         Label dashHeading = makeHeading("Emission History Visualiser");
 
         summaryLabel=new Label("Total Entries: 0  |  Total CO2: 0.00 kg  |  Top Emitter: N/A");
-        summaryLabel.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        summaryLabel.setBackground(new Background(new BackgroundFill(Color.DARKSLATEGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         dashboardGrid=new FlowPane(10, 10);
         ScrollPane gridScroll = new ScrollPane(dashboardGrid);
         gridScroll.setFitToWidth(true);
         detailLabel = new Label("Click a card above to see its full details.");
-        detailLabel.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, new CornerRadii(4), Insets.EMPTY)));
+        detailLabel.setBackground(new Background(new BackgroundFill(Color.DARKSLATEGRAY, new CornerRadii(4), Insets.EMPTY)));
         detailLabel.setWrapText(true);
         dashLayout.getChildren().addAll(dashHeading,summaryLabel,gridScroll,new Label("Entry Details:"), detailLabel);
 
@@ -179,16 +199,39 @@ public class GUI extends Application {
         Label offsetHeading=makeHeading("Carbon Offset Market");
 
         totalEmissionsLabel=new Label("Current Total Emissions: 0.00 kg CO2");// Total emissions banner
-        totalEmissionsLabel.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, new CornerRadii(5), Insets.EMPTY)));
+        totalEmissionsLabel.setBackground(new Background(new BackgroundFill(Color.DARKSLATEGRAY, new CornerRadii(5), Insets.EMPTY)));
         offsetUserField=new TextField();
         offsetUserField.setPromptText("Username to offset");
 
         paymentCombo=new ComboBox<String>();// ComboBox for payment method
         paymentCombo.getItems().addAll("Credit Card", "Digital Wallet", "Campus Card");
         paymentCombo.setPromptText("Select Payment Method");
+
+        ImpactCombo=new ComboBox<String>();// ComboBox for impact type
+        ImpactCombo.getItems().addAll("Planting trees", "Build wind farms", "Install methane digesters","Support small farming businesses","Regenerative agriculture");
+        ImpactCombo.setPromptText("Select Impact Type");
         Label rateNote=new Label("Rate: $15 per 1000 kg CO2  ($0.015 per kg)");
         rateNote.setTextFill(Color.GRAY);
-
+        Button show_estimate=makeButton("Show Estimate", Color.DARKGREEN);
+        Label estimate=new Label("");
+        
+        show_estimate.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                String user= offsetUserField.getText().trim();
+                if (user.isEmpty()) {
+                    estimate.setText("Please enter a username.");
+                    return;
+                }
+                double userTotal = tracker.getTotalEmissionsForUser(user);
+                if (userTotal <= 0) {
+                    estimate.setText("No emissions found for user: " + user);
+                    return;
+                }
+                double cost = tracker.getTotalEmissionsForUser(user) * TransactionHandler.OFFSET_RATE;
+                estimate.setText(String.format("Estimated cost to offset %.2f kg CO2: $%.2f", userTotal, cost));
+            }
+        });
         Button buyBtn=makeButton("Purchase Offset", Color.DARKGREEN);
         Label processingLabel=new Label("");
         processingLabel.setTextFill(Color.BLUE);
@@ -203,30 +246,82 @@ public class GUI extends Application {
         Label histHeading=makeHeading("Offset History:");
         offsetHistoryList= new ListView<String>();
         offsetHistoryList.setPrefHeight(130);
-        offsetLayout.getChildren().addAll(offsetHeading,totalEmissionsLabel,makeRow("Username:", offsetUserField),
-            makeRow("Payment Method:", paymentCombo),rateNote,buyBtn,processingLabel,
-            new Label("Receipt:"),receiptArea,histHeading,offsetHistoryList
-        );
+        
+        requestDiscountBtn = new Button("Request Discount");
+        requestDiscountBtn.setDisable(true);
+        if (!tracker.getEntries().isEmpty()) {
+        requestDiscountBtn.setDisable(false);
+}
+    requestDiscountBtn.setOnAction(new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent e) {
+            handleRequestDiscount();
+        }
+        
+    });
+
+
+    discountResultLabel = new Label();
+    discountResultLabel.setTextFill(Color.LIGHTGREEN);
+
+    discountErrorLabel = new Label();
+    discountErrorLabel.setTextFill(Color.RED);
+    discountErrorLabel.setVisible(false);
+    HBox inputRow = new HBox(35,makeRow("Username:", offsetUserField), makeRow("Payment Method:", paymentCombo),makeRow("Impact:", ImpactCombo));
+    HBox discountErrorBox = new HBox(10, requestDiscountBtn, discountErrorLabel);
+
+    offsetLayout.getChildren().addAll(offsetHeading,totalEmissionsLabel, inputRow,
+                rateNote,show_estimate,estimate,discountErrorBox, discountResultLabel,buyBtn,processingLabel,
+                new Label("Receipt:"),receiptArea,histHeading,offsetHistoryList
+            );
+
+        offsetUserField.textProperty().addListener((obs, oldVal, newVal) -> {
+            String user = newVal.trim();
+            estimate.setText("");
+            discountResultLabel.setText("");
+            if (userDiscountPctMap.containsKey(user)) {
+                // They have a saved discount! Show it.
+                int pct = userDiscountPctMap.get(user);
+                double val = userDiscountedValueMap.get(user);
+                discountResultLabel.setText("Saved discount: " + pct + "% (Adjusted: " + String.format("%.2f", val) + " kg)");
+                requestDiscountBtn.setDisable(true); // Don't let them request again if they have one
+            } else {
+                // No discount for this name yet.
+                discountResultLabel.setText("");
+                // Re-enable button if there are entries (Assignment requirement)
+                requestDiscountBtn.setDisable(tracker.getEntries().isEmpty());
+            }
+        });
+
+
+        ScrollPane offsetScroll = new ScrollPane(offsetLayout);
+        offsetScroll.setFitToWidth(true);
+
 
         //Assemble tabs
         TabPane tabPane= new TabPane();
         Tab dashTab=new Tab("Live Dashboard");
         Tab inputTab=new Tab("Input & Operations");
         Tab offsetTab=new Tab("Carbon Offset");
+        offsetTab.setContent(offsetScroll);
         dashTab.setClosable(false);
         inputTab.setClosable(false);
         offsetTab.setClosable(false);
         dashTab.setContent(dashLayout);
         inputTab.setContent(inputLayout);
-        offsetTab.setContent(offsetLayout);
-        tabPane.getTabs().addAll(dashTab,inputTab,offsetTab);
+
+        Tab leaderboardTab = new Tab("Leaderboard");
+        leaderboardTab.setClosable(false);
+        leaderboardTab.setContent(buildLeaderboardTab());
+        tabPane.getTabs().addAll(dashTab, inputTab, offsetTab, leaderboardTab);
+
+        
+        
 
         // Log on window close
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent e) {
-                Logger.log(Logger.Operation.STATE_SAVED,
-                    tracker.getEntries().size() + " entries in " + STATE_FILE);
+                Logger.log(Logger.Operation.STATE_SAVED,tracker.getEntries().size() + " entries in " + STATE_FILE);
             }
         });
 
@@ -249,6 +344,7 @@ public class GUI extends Application {
         dashboardGrid.getChildren().clear();
         for (EmissionSource e:tracker.getEntries()) dashboardGrid.getChildren().add(buildCard(e));
             updateSummaryBar();
+            refreshLeaderboard();
     }
 
     /**
@@ -260,11 +356,11 @@ public class GUI extends Application {
     private Label buildCard(EmissionSource entry) {
         double val = entry.calculateEmission();
 
-        Color bg=val < 1.0 ?Color.GREEN:val<= 3.0?Color.YELLOW:Color.RED;
+        Color bg=val < 1.0 ?Color.GREEN:val<= 3.0?Color.GOLD:Color.TOMATO;
         Label card = new Label(entry.getSourceID()+"\n" +String.format("%.2f", val)+" kg CO2");
         card.setPrefSize(95, 80);
         card.setAlignment(Pos.CENTER);
-        card.setTextFill(bg.equals(Color.YELLOW)?Color.BLACK:Color.WHITE);
+        card.setTextFill(bg.equals(Color.GOLD)?Color.BLACK:Color.WHITE);
         card.setBackground(new Background(new BackgroundFill(bg, new CornerRadii(6), Insets.EMPTY)));
         card.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(6), BorderStroke.THIN)));
         // Click - show full toString()
@@ -285,6 +381,8 @@ public class GUI extends Application {
         summaryLabel.setText(
             "Total Entries: "+tracker.getEntries().size()+" |  Total CO2: " +tracker.getTotalEmissions() +" kg  |  Top Emitter: "+ getTopEmitter());
     }
+
+    
 
     /**
      * Determines the user with the highest total emissions.
@@ -307,6 +405,7 @@ public class GUI extends Application {
      */
     // always the same pattern: ComboBox (string) then TextField (number)
     private void updateDynamicFields(String type) {
+    
         dynamicFields.getChildren().clear();
         if (type == null) return;
         stringCombo = new ComboBox<String>();
@@ -332,6 +431,40 @@ public class GUI extends Application {
         }
     }
 
+
+
+    private void handleRequestDiscount() {
+        // Get the username typed in the offset username field
+        String user = offsetUserField.getText().trim();
+ 
+        if (user.isEmpty()) {
+            discountErrorLabel.setText("Please enter a username in the Username field above.");
+            discountErrorLabel.setVisible(true);
+            discountResultLabel.setText("");
+            return;
+        }
+ 
+        // Get THIS user's emissions only — not the grand total
+        double userEmission = tracker.getTotalEmissionsForUser(user);
+ 
+        if (userEmission <= 0) {
+            discountErrorLabel.setText("No emissions found for user: \"" + user + "\". Please add entries first.");
+            discountErrorLabel.setVisible(true);
+            discountResultLabel.setText("");
+            return;
+        }
+ 
+        // Reset UI
+        discountResultLabel.setText("");
+        discountErrorLabel.setVisible(false);
+        requestDiscountBtn.setDisable(true);
+        requestDiscountBtn.setText("Requesting...");
+ 
+        // Start background thread — never block the JavaFX thread
+        DiscountThread t = new DiscountThread(user, userEmission);
+        t.setDaemon(true);
+        t.start();
+    }
     /**
      * Event handler for adding a new entry to the emission tracker.
      * Performs input validation, model creation, persistence update, and UI refresh.
@@ -353,7 +486,7 @@ public class GUI extends Application {
 
             // Validate Source ID (format + uniqueness)
             if (!InputValidator.validateUniqueSourceId(id, tracker)) {
-                feedbackLabel.setText("✗ Source ID is invalid or already in use. Use [A-Z]-###");
+                feedbackLabel.setText("✗ already in use. Use [A-Z]-###");
                 return;
             }
             if (user.isEmpty()) {
@@ -394,6 +527,14 @@ public class GUI extends Application {
                 return;
             }
 
+            String userName = userField.getText().trim();
+
+            if (userName.isEmpty() || !userName.matches("[a-zA-Z ]+")) {
+                feedbackLabel.setText("UserName must contain letters only.");
+                return;
+            }
+          
+
             EmissionSource entry;
             if (type.equals("Transportation")) {
                 entry=new TransportationEmission(id, "Transportation", date, user, numVal, stringVal);
@@ -408,6 +549,7 @@ public class GUI extends Application {
             } else { return; }
 
             tracker.addEntry(entry);
+            requestDiscountBtn.setDisable(false);
             Logger.log(Logger.Operation.ENTRY_ADDED, entry.toString());
             appendStateLine(type +"|"+id +"|"+date+"|"+user+"|"+stringVal+"|"+numVal);
             refreshDashboard();
@@ -498,17 +640,48 @@ public class GUI extends Application {
             pause.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    String receipt = transactionHandler.CalculateOffSet(user, payment);
-                    if (receipt.startsWith("No emissions found")) {
-                        receiptArea.setText(receipt);
-                        processingLabel.setText("");
-                        buyBtn.setDisable(false);
-                        return;
-                    }
+                String user = offsetUserField.getText().trim();
+                String receipt;
+
+                if (userDiscountedValueMap.containsKey(user)) {
+                    int pct = userDiscountPctMap.get(user);
+                    double discountedVal = userDiscountedValueMap.get(user);
+                    receipt = transactionHandler.CalculateOffSetWithDiscount(user, payment, pct, discountedVal);
+                    
+                    // IMPORTANT: Remove the discount after use so they can't reuse it for a 0 balance
+                    userDiscountPctMap.remove(user);
+                    userDiscountedValueMap.remove(user);
+                } else {
+                    receipt = transactionHandler.CalculateOffSet(user, payment);
+                }
                     receiptArea.setText(receipt);
+                    tracker.getEntries().removeIf(entry -> entry.getUserName().equalsIgnoreCase(user));
+                    // rewrite state file without the purchased user's entries
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(STATE_FILE, false))) {
+                    for (EmissionSource entry : tracker.getEntries()) {
+                        writer.write(entry.getCategory() + "|" + entry.getSourceID() + "|" 
+                            + entry.getDate() + "|" + entry.getUserName() + "|");
+                        // write the type-specific fields
+                        if (entry instanceof EnergyEmission) {
+                            EnergyEmission ee = (EnergyEmission) entry;
+                            writer.write(ee.getEnergySource() + "|" + ee.getkWhUsed());
+                        } else if (entry instanceof TransportationEmission) {
+                            TransportationEmission te = (TransportationEmission) entry;
+                            writer.write(te.getTransport() + "|" + te.getDistance());
+                        } else if (entry instanceof FoodEmission) {
+                            FoodEmission fe = (FoodEmission) entry;
+                            writer.write(fe.getMealType() + "|" + fe.getNumberOfMeals());
+                        }
+                        writer.newLine();
+                    }
+                    } catch (IOException ex) {
+                        System.err.println("Failed to rewrite state: " + ex.getMessage());
+                    }
+                    refreshDashboard();
 
                     Logger.log(Logger.Operation.OFFSET_PURCHASED,"User: " + user + " | Payment: " + payment);
-                    totalEmissionsLabel.setText(String.format("Current Total: %f kg CO2", tracker.getTotalEmissions()-tracker.getTotalEmissionsForUser(user)));
+                    totalEmissionsLabel.setText(String.format("Current Total: %.2f kg CO2", tracker.getTotalEmissions()));
+
                     
 
                     // Add to offset history ListView
@@ -577,7 +750,7 @@ public class GUI extends Application {
      * @return void
      */
 
-    private void appendStateLine(String line) {
+    public void appendStateLine(String line) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(STATE_FILE, true))) {
             writer.write(line);
             writer.newLine();
@@ -586,7 +759,173 @@ public class GUI extends Application {
         }
     }
 
+
+
+    public class DiscountThread extends Thread {
+        private String userName;
+        private double userEmission;
+ 
+        /**
+         * @param userName     the user whose emissions are being discounted
+         * @param userEmission the total emissions for that user only
+         */
+        public DiscountThread(String userName, double userEmission) {
+            this.userName = userName;
+            this.userEmission = userEmission;
+        }
+ 
+        public void run() {
+            try {
+                // Use ConnectionConfig so host/port are not hardcoded here
+                ConnectionConfig config = new ConnectionConfig("localhost", 6000);
+ 
+                // Connect to server — same pattern as SimpleClient.java from class
+                Socket socket = new Socket(config.getHost(), config.getPort());
+                socket.setSoTimeout(5000);
+ 
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+ 
+                // Send this user's emission to the server
+                out.println(String.format("%.2f", userEmission));
+                out.flush();
+ 
+                // Read the server response e.g. "DISCOUNT:15:10.84"
+                String response = in.readLine();
+ 
+                // Close resources
+                in.close();
+                out.close();
+                socket.close();
+ 
+                // Use ResponseParser to extract discount and discounted value
+                ResponseParser parser = new ResponseParser(response);
+                int pct = parser.getDiscountPct();
+                double discounted = parser.getDiscountedValue();
+                
+ 
+                final String msg = "Server discount applied: " + pct + "% — "
+                        + userName + "'s adjusted footprint: "
+                        + String.format("%.2f", discounted) + " kg CO2";
+
+                final int finalPct = pct;
+                final double finalDiscounted = discounted;
+ 
+                Platform.runLater(() -> {
+    // Save to maps
+    userDiscountPctMap.put(userName, finalPct);
+    userDiscountedValueMap.put(userName, finalDiscounted);
+
+    discountResultLabel.setText("Server discount applied: " + finalPct + "% — " 
+        + userName + "'s adjusted footprint: " + String.format("%.2f", finalDiscounted) + " kg CO2");
     
+    // Log according to Task 1 requirements
+    Logger.log(Logger.Operation.DISCOUNT_REQUESTED, "User: " + userName + " | Pct: " + finalPct);
+});            } catch (SocketTimeoutException e) {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        discountErrorLabel.setText("Connection timed out. Please try again later.");
+                        discountErrorLabel.setVisible(true);
+                    }
+                });
+            } catch (java.net.ConnectException e) {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        discountErrorLabel.setText("Could not reach server. Please make sure DiscountServer is running.");
+                        discountErrorLabel.setVisible(true);
+                    }
+                });
+            } catch (Exception e) {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        discountErrorLabel.setText("Network error: " + e.getMessage());
+                        discountErrorLabel.setVisible(true);
+                    }
+                });
+            }
+            
+ 
+            // Always re-enable the button so user can click again
+            Platform.runLater(new Runnable() {
+                public void run() {
+                    requestDiscountBtn.setDisable(false);
+                    requestDiscountBtn.setText("Request Discount");
+                }
+            });
+        }
+    }
+    
+    public ScrollPane buildLeaderboardTab() {
+        VBox layout = new VBox(12);
+        layout.setPadding(new Insets(20));
+        layout.getChildren().add(makeHeading("🏆 Leaderboard"));
+
+        HBox legend = new HBox(20);
+        legend.setPadding(new Insets(10));
+        Label high = new Label("Carbon Chaos  (> 5 kg)");
+        high.setBackground(new Background(new BackgroundFill(Color.TOMATO, new CornerRadii(5), Insets.EMPTY)));
+        high.setTextFill(Color.WHITE);
+        high.setPadding(new Insets(10));
+
+        Label med = new Label("Eco Hustler  (2-5 kg)");
+        med.setBackground(new Background(new BackgroundFill(Color.GOLD, new CornerRadii(5), Insets.EMPTY)));
+        med.setTextFill(Color.BLACK);
+        med.setPadding(new Insets(10)); 
+        Label low = new Label("Planet Pro  (< 2 kg)");
+        low.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, new CornerRadii(5), Insets.EMPTY)));
+        low.setTextFill(Color.BLACK);
+        low.setPadding(new Insets(10));
+
+        legend.getChildren().addAll(high, med, low);
+        
+        leaderboardBox = new VBox(15);
+        layout.getChildren().addAll(legend, leaderboardBox);
+        
+
+        ScrollPane scroll = new ScrollPane(layout);
+        scroll.setFitToWidth(true);
+        return scroll;
+    }
+
+    private void refreshLeaderboard() {
+            leaderboardBox.getChildren().clear();
+
+            // Group by user
+            HashMap<String, Double> totals = new HashMap<>();
+            for (EmissionSource e : tracker.getEntries()) {
+                String name = e.getUserName();
+                if (totals.containsKey(name)) {
+                    totals.put(name, totals.get(name) + e.calculateEmission());
+                } else {
+                    totals.put(name, e.calculateEmission());
+                }
+            }
+
+            // Sort lowest to highest
+            ArrayList<Map.Entry<String, Double>> sorted = new ArrayList<>(totals.entrySet());
+            sorted.sort((a, b) -> Double.compare(a.getValue(), b.getValue()));
+
+            int rank = 1;
+            for (Map.Entry<String, Double> entry: sorted) {
+                Label rankLabel = new Label("#" + rank);
+                rankLabel.setMinWidth(40);
+                rank++;
+
+                Label nameLabel = new Label(entry.getKey());
+                nameLabel.setMinWidth(150);
+               
+                Label emissionLabel = new Label(String.format("%.2f kg CO2", entry.getValue()));
+                emissionLabel.setMinWidth(120);
+                emissionLabel.setTextFill(entry.getValue() > 5 ? Color.TOMATO : entry.getValue() > 2 ? Color.GOLD : Color.LIGHTGREEN);
+
+                HBox row = new HBox(20, rankLabel, nameLabel, emissionLabel);
+                
+                leaderboardBox.getChildren().add(row);
+            }
+        }
+
+
+
     // formating helpers
        /**
      * Creates a standardized heading label used across tabs.
@@ -594,10 +933,10 @@ public class GUI extends Application {
      * @param text heading text
      * @return configured label instance
      */
-    private Label makeHeading(String text) {
+    public Label makeHeading(String text) {
         Label l=new Label(text);
-        l.setFont(new Font("Arial", 16));
-        l.setTextFill(Color.DARKGREEN);
+        l.setFont(new Font("Arial", 20));
+        l.setTextFill(Color.CYAN);
         return l;
     }
 
@@ -607,7 +946,7 @@ public class GUI extends Application {
      * @param bg background color of the button
      * @return styled button instance
      */
-    private Button makeButton(String text, Color bg) {
+    public Button makeButton(String text, Color bg) {
         Button btn = new Button(text);
         btn.setTextFill(Color.WHITE);
         btn.setBackground(new Background( new BackgroundFill(bg, new CornerRadii(5), Insets.EMPTY)));
@@ -620,7 +959,7 @@ public class GUI extends Application {
      * @param control node to display to the right of the label
      * @return styled HBox container
      */
-    private HBox makeRow(String labelText, Node control) {
+    public HBox makeRow(String labelText, Node control) {
         Label lbl=new Label(labelText);
         HBox row = new HBox(10, lbl, control);
         return row;
