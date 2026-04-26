@@ -612,3 +612,20 @@
 2026-04-26 14:05:28 | OFFSET_PURCHASED | User: sadaf | Payment: Credit Card
 2026-04-26 14:05:58 | DISCOUNT_REQUESTED | User: Zainab | Pct: 19
 2026-04-26 14:06:04 | OFFSET_PURCHASED | User: zainab | Payment: Credit Card
+2026-04-26 14:35:16 | STATE_LOADED | Restored 2 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-26 14:35:24 | DISCOUNT_REQUESTED | User: sss | Pct: 15
+2026-04-26 17:02:34 | ENTRY_ADDED | Y-008 | Transportation | 2-4-2022 | Trisha | bus, 40.0 km | 3.88 kg CO2
+2026-04-26 17:03:10 | ENTRY_ADDED | T-005 | Energy | 2-2-2014 | Tom | coal, 111.0 kWh | 44.96 kg CO2
+2026-04-26 17:03:48 | ENTRY_ADDED | Y-003 | Food | 2-2-2023 | Tom | poultry, 3 meals | 5.46 kg CO2
+2026-04-26 17:04:22 | ENTRY_ADDED | G-007 | Transportation | 4-8-2024 | Sadaf | train, 100.0 km | 3.5 kg CO2
+2026-04-26 17:06:25 | STATE_LOADED | Restored 6 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-26 17:07:03 | ENTRY_ADDED | F-005 | Transportation | 4-1-2025 | John | car, 14.0 km | 2.38 kg CO2
+2026-04-26 17:07:52 | ENTRY_ADDED | U-004 | Energy | 2-8-2011 | Zainab | nuclear, 1.0 kWh | 0.01 kg CO2
+2026-04-26 17:08:34 | ENTRY_ADDED | R-005 | Transportation | 5-09-2013 | Alice | car, 6.0 km | 1.02 kg CO2
+2026-04-26 17:09:10 | ENTRY_ADDED | I-004 | Food | 5-3-2021 | Fred | vegetarian, 3 meals | 2.40 kg CO2
+2026-04-26 17:13:51 | STATE_SAVED | 6 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-26 17:13:52 | STATE_SAVED | 2 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-26 17:13:54 | STATE_SAVED | 10 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-26 20:23:26 | STATE_LOADED | Restored 10 entries from ./ZeroCarbonFootprintTracker/greenprint_state.txt
+2026-04-26 20:25:20 | DISCOUNT_REQUESTED | User: Fred | Pct: 17
+2026-04-26 20:25:47 | STATE_SAVED | 10 entries in ./ZeroCarbonFootprintTracker/greenprint_state.txt

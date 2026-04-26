@@ -1,2 +1,10 @@
 Food|J-001|6-2-2026|Alice|vegetarian|2
 Energy|D-001|2-4-2027|Danilo|wind|42.0
+Transportation|Y-008|2-4-2022|Trisha|bus|40.0
+Energy|T-005|2-2-2014|Tom|coal|111.0
+Food|Y-003|2-2-2023|Tom|poultry|3.0
+Transportation|G-007|4-8-2024|Sadaf|train|100.0
+Transportation|F-005|4-1-2025|John|car|14.0
+Energy|U-004|2-8-2011|Zainab|nuclear|1.0
+Transportation|R-005|5-09-2013|Alice|car|6.0
+Food|I-004|5-3-2021|Fred|vegetarian|3.0

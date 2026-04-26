@@ -1,4 +1,4 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.network;
 
  
 /**
@@ -13,7 +13,6 @@ public class DiscountCalculator {
      * @param totalEmission total kg CO2 (must be >= 0)
      * @param discountPct   discount percentage (0 to 30)
      * @return discounted emission rounded to 2 decimal places
-     * @throws IllegalArgumentException if inputs are out of range
      */
     public static double applyDiscount(double totalEmission, int discountPct) {
         if (totalEmission < 0) totalEmission = 0;

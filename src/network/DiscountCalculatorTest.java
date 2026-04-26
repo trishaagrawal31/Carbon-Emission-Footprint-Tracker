@@ -1,4 +1,4 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.network;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 

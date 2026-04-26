@@ -1,4 +1,4 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.network;
 
 /**
  * Holds the host and port for the GreenPrint Discount Server connection.

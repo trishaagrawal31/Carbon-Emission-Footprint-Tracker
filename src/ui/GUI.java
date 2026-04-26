@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import javafx.application.Platform;
@@ -49,11 +50,11 @@ import ZeroCarbonFootprintTracker.src.model.EnergyEmission;
 import ZeroCarbonFootprintTracker.src.model.FoodEmission;
 import ZeroCarbonFootprintTracker.src.model.FootprintTracker;
 import ZeroCarbonFootprintTracker.src.model.TransportationEmission;
+import ZeroCarbonFootprintTracker.src.network.ConnectionConfig;
+import ZeroCarbonFootprintTracker.src.network.ResponseParser;
 import ZeroCarbonFootprintTracker.src.util.InputValidator;
 import ZeroCarbonFootprintTracker.src.util.Logger;
 import ZeroCarbonFootprintTracker.src.util.TransactionHandler;
-import ZeroCarbonFootprintTracker.ConnectionConfig;
-import ZeroCarbonFootprintTracker.ResponseParser;
 
 
 
@@ -97,8 +98,8 @@ public class GUI extends Application {
     private Button requestDiscountBtn;
     private Label discountResultLabel;
     private Label discountErrorLabel;
-    private java.util.Map<String, Integer> userDiscountPctMap = new java.util.HashMap<>();
-    private java.util.Map<String, Double> userDiscountedValueMap = new java.util.HashMap<>();
+    private Map<String, Integer> userDiscountPctMap = new HashMap<>();
+    private Map<String, Double> userDiscountedValueMap = new HashMap<>();
     private VBox leaderboardBox;
     private ComboBox<String> ImpactCombo;
 
@@ -345,8 +346,17 @@ public class GUI extends Application {
      */
     public void refreshDashboard() {
         dashboardGrid.getChildren().clear();
+
+        //top emitter calculation
+        String topUser  = "N/A";
+        double topTotal = -1;
+        for (EmissionSource e:tracker.getEntries()) {
+            double t = tracker.getTotalEmissionsForUser(e.getUserName());
+            if (t >topTotal) {topTotal=t; topUser = e.getUserName(); }
+        }
+
         for (EmissionSource e:tracker.getEntries()) dashboardGrid.getChildren().add(buildCard(e));
-            updateSummaryBar();
+            summaryLabel.setText("Total Entries: "+tracker.getEntries().size()+" |  Total CO2: " +tracker.getTotalEmissions() +" kg  |  Top Emitter: "+ topUser);
             refreshLeaderboard();
     }
 
@@ -376,30 +386,7 @@ public class GUI extends Application {
         return card;
     }
 
-    /**
-     * Updates the top summary bar with current totals and top contributor.
-     * @return void
-     */
-    public void updateSummaryBar() { 
-        summaryLabel.setText(
-            "Total Entries: "+tracker.getEntries().size()+" |  Total CO2: " +tracker.getTotalEmissions() +" kg  |  Top Emitter: "+ getTopEmitter());
-    }
 
-    
-
-    /**
-     * Determines the user with the highest total emissions.
-     * @return username of the top emitter, or "N/A" if none
-     */
-    private String getTopEmitter() {
-        String topUser  = "N/A";
-        double topTotal = -1;
-        for (EmissionSource e:tracker.getEntries()) {
-            double t = tracker.getTotalEmissionsForUser(e.getUserName());
-            if (t >topTotal) {topTotal=t; topUser = e.getUserName(); }
-        }
-        return topUser;
-    }
 
     /**
      * Updates the form section that is displayed for the selected emission type.
@@ -436,6 +423,12 @@ public class GUI extends Application {
 
 
 
+    /**
+     * Initiates a discount request by connecting to the DiscountServer.
+     * Sends the user's total emissions and processes the server's response.
+     * Updates the UI with the applied discount or error message.
+     * @return void
+     */
     public void handleRequestDiscount() {
         // Get the username typed in the offset username field
         String user = offsetUserField.getText().trim();
@@ -463,7 +456,7 @@ public class GUI extends Application {
         requestDiscountBtn.setDisable(true);
         requestDiscountBtn.setText("Requesting...");
  
-        // Start background thread — never block the JavaFX thread
+        // Start background thread to request discount from server
         DiscountThread t = new DiscountThread(user, userEmission);
         t.setDaemon(true);
         t.start();
@@ -758,7 +751,7 @@ public class GUI extends Application {
     }
 
     /**
-     * Appends a single entry line to the persistent state fileq
+     * Appends a single entry line to the state file
      * @param line formatted entry data in the pipe-separated state format
      * @return void
      */
@@ -768,7 +761,7 @@ public class GUI extends Application {
             writer.write(line);
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("appendStateLine failed: " + e.getMessage());
+            System.out.println("appendStateLine failed: ");
         }
     }
 
@@ -787,12 +780,17 @@ public class GUI extends Application {
             this.userEmission = userEmission;
         }
  
+        /**
+         * Executes the discount request in a background thread,
+         * connects to the server, and updates the UI on completion.
+         */
+        @Override
         public void run() {
             try {
                 // Use ConnectionConfig so host/port are not hardcoded here
                 ConnectionConfig config = new ConnectionConfig("localhost", 6000);
  
-                // Connect to server — same pattern as SimpleClient.java from class
+                // Connect to server 
                 Socket socket = new Socket(config.getHost(), config.getPort());
                 socket.setSoTimeout(5000);
  
@@ -803,7 +801,7 @@ public class GUI extends Application {
                 out.println(String.format("%.2f", userEmission));
                 out.flush();
  
-                // Read the server response e.g. "DISCOUNT:15:10.84"
+                // Read the server response 
                 String response = in.readLine();
  
                 // Close resources
@@ -815,10 +813,18 @@ public class GUI extends Application {
                 ResponseParser parser = new ResponseParser(response);//error handling
                 int pct = parser.getDiscountPct();
                 double discounted = parser.getDiscountedValue();
+
+                if (pct == 0 && discounted == 0.0) {
+                    Platform.runLater(() -> {
+                        discountErrorLabel.setText("Server returned an unexpected response. Please try again.");
+                        discountErrorLabel.setVisible(true);
+                    });
+                    return;
+                }
             
  
                 Platform.runLater(() -> {
-        // Save to maps
+                    // Save to maps
                     userDiscountPctMap.put(userName.toLowerCase(), pct);
                     userDiscountedValueMap.put(userName.toLowerCase(), discounted);
                     
@@ -830,39 +836,33 @@ public class GUI extends Application {
                     Logger.log(Logger.Operation.DISCOUNT_REQUESTED, "User: " + userName + " | Pct: " + pct);
                 });            
             } catch (SocketTimeoutException e) {
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        discountErrorLabel.setText("Connection timed out. Please try again later.");
-                        discountErrorLabel.setVisible(true);
-                    }
+                Platform.runLater(() -> {
+                    discountErrorLabel.setText("Connection timed out. Please try again later.");
+                    discountErrorLabel.setVisible(true);
                 });
-            } catch (java.net.ConnectException e) {
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        discountErrorLabel.setText("Could not reach server. Please make sure DiscountServer is running.");
-                        discountErrorLabel.setVisible(true);
-                    }
+            } catch (ConnectException e) {
+                Platform.runLater(() -> {
+                    discountErrorLabel.setText("Could not reach server. Please make sure DiscountServer is running.");
+                    discountErrorLabel.setVisible(true);
                 });
             } catch (Exception e) {
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        discountErrorLabel.setText("Network error: " + e.getMessage());
-                        discountErrorLabel.setVisible(true);
-                    }
+                Platform.runLater(() -> {
+                    discountErrorLabel.setText("Network error ");
+                    discountErrorLabel.setVisible(true);
                 });
             }
                 
- 
-            // Always re-enable the button so user can click again
-            Platform.runLater(new Runnable() {
-                public void run() {
-                    requestDiscountBtn.setDisable(true);
-                    requestDiscountBtn.setText("Request Discount");
-                }
+            Platform.runLater(() -> {
+                requestDiscountBtn.setDisable(true);
+                requestDiscountBtn.setText("Request Discount");
             });
         }
     }
     
+    /**
+     * Builds the Leaderboard tab UI with legend and scrollable content area.
+     * @return ScrollPane containing the leaderboard layout
+     */
     public ScrollPane buildLeaderboardTab() {
         VBox layout = new VBox(12);
         layout.setPadding(new Insets(20));
@@ -870,16 +870,16 @@ public class GUI extends Application {
 
         HBox legend = new HBox(20);
         legend.setPadding(new Insets(10));
-        Label high = new Label("Carbon Chaos  (> 5 kg)");
+        Label high = new Label("Carbon Chaos  (> 3 kg)");
         high.setBackground(new Background(new BackgroundFill(Color.TOMATO, new CornerRadii(5), Insets.EMPTY)));
         high.setTextFill(Color.WHITE);
         high.setPadding(new Insets(10));
 
-        Label med = new Label("Eco Hustler  (2-5 kg)");
+        Label med = new Label("Eco Hustler  (1-3 kg)");
         med.setBackground(new Background(new BackgroundFill(Color.GOLD, new CornerRadii(5), Insets.EMPTY)));
         med.setTextFill(Color.BLACK);
         med.setPadding(new Insets(10)); 
-        Label low = new Label("Planet Pro  (< 2 kg)");
+        Label low = new Label("Planet Pro  (< 1 kg)");
         low.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, new CornerRadii(5), Insets.EMPTY)));
         low.setTextFill(Color.BLACK);
         low.setPadding(new Insets(10));
@@ -894,6 +894,12 @@ public class GUI extends Application {
         scroll.setFitToWidth(true);
         return scroll;
     }
+
+    /**
+     * Refreshes the leaderboard display by calculating user totals,
+     * sorting them from lowest to highest emissions, and updating the UI.
+     * @return void
+     */
 
     public void refreshLeaderboard() {
             leaderboardBox.getChildren().clear();
@@ -924,7 +930,7 @@ public class GUI extends Application {
                
                 Label emissionLabel = new Label(String.format("%.2f kg CO2", entry.getValue()));
                 emissionLabel.setMinWidth(120);
-                emissionLabel.setTextFill(entry.getValue() > 5 ? Color.TOMATO : entry.getValue() > 2 ? Color.GOLD : Color.LIGHTGREEN);
+                emissionLabel.setTextFill(entry.getValue() > 3 ? Color.TOMATO : entry.getValue() > 1 ? Color.GOLD : Color.LIGHTGREEN);
 
                 HBox row = new HBox(20, rankLabel, nameLabel, emissionLabel);
                 

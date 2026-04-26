@@ -1,13 +1,21 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.network;
 
 import java.io.*;
 import java.net.*;
 import java.util.Random;
- 
+
+/**
+ * Server that accepts client connections and calculates discounts.
+ * Listens on port 6000 and returns discount percentages (1-30%).
+ */
 public class DiscountServer {
 
     private static final ConnectionConfig config = new ConnectionConfig("localhost", 6000);
 
+    /**
+     * Starts the discount server and listens for client connections.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         System.out.println("Server: GreenPrint Discount Server started on port " + config.getPort());
 
@@ -38,6 +46,7 @@ public class DiscountServer {
                     in.close();
                     out.close();
                     clientSocket.close();
+                    
 
                 } catch (Exception e) {
                     System.err.println("Server: Error handling client");

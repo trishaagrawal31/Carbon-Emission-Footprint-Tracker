@@ -1,4 +1,4 @@
-package ZeroCarbonFootprintTracker;
+package ZeroCarbonFootprintTracker.src.network;
 
 /**
  * Parses the response string sent by the GreenPrint Discount Server.
@@ -15,26 +15,27 @@ public class ResponseParser {
      * Constructs a ResponseParser and parses the given server response.
      *
      * @param response the raw response line read from the server via BufferedReader
-     * @throws IllegalArgumentException if the response is null, blank, badly formatted,
-     *                                  or contains non-numeric values
      */
     public ResponseParser(String response) {
+        this.discountPct = 0;
+        this.discountedValue = 0.0;
+
         if (response == null || response.isBlank()) {
-            throw new IllegalArgumentException("Response is null or empty.");
+            System.out.println("ResponseParser: Response is null or empty.");
+            return;
         }
- 
-        // Split the response by ":" 
+
         String[] parts = response.trim().split(":");
- 
-        if (parts.length != 3 || !parts[0].equals("DISCOUNT")) {
-            throw new IllegalArgumentException("Unexpected response format: " + response);
+        if (parts.length!= 3 ||!parts[0].equals("DISCOUNT")) {
+            System.out.println("ResponseParser: Unexpected format: " + response);
+            return;
         }
- 
+
         try {
-            this.discountPct     = Integer.parseInt(parts[1]);
+            this.discountPct = Integer.parseInt(parts[1]);
             this.discountedValue = Double.parseDouble(parts[2]);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Could not parse numbers in response: " + response);
+            System.out.println("ResponseParser: Could not parse numbers: " + response);
         }
     }
  
