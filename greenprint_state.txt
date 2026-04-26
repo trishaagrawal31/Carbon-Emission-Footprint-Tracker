@@ -1,12 +1,2 @@
-Transportation|T-001|2-3-2029|bob|bus|23.0
 Food|J-001|6-2-2026|Alice|vegetarian|2
-Transportation|A-001|3-2-2012|Adira|car|34.0
-Transportation|Q-001|19-3-2026|Aaliya|cycle|22.0
-Food|R-001|4-2-2023|Sadaf|poultry|1
-Transportation|Z-001|3-2-2093|Zainab|car|17.0
 Energy|D-001|2-4-2027|Danilo|wind|42.0
-Transportation|X-001|20-12-2021|Greg|car|9.0
-Energy|W-009|2-4-2024|Tom|solar|12.0
-Transportation|T-008|2-7-2025|Tom|bus|13.0
-Transportation|T-009|6-6-2026|Tom|bus|12.0
-Transportation|T-002|2-3-2024|211|car|12.0

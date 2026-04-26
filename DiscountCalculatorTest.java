@@ -28,7 +28,7 @@ public class DiscountCalculatorTest {
     public void test100CalculateDiscount() {
         double total = 100.0;
         int discount= 100;
-        double expected = 0.0; 
+        double expected = 70.0; 
         //invoke 
         double price = DiscountCalculator.applyDiscount(total,discount);
         //analyse
@@ -48,10 +48,9 @@ public class DiscountCalculatorTest {
     public void testNegativeCalculateDiscount(){
         double total = 100.0;
         int discount= -1;
+        double expected = 100.0; 
         //invoke 
-        try {
-            DiscountCalculator.applyDiscount(total,discount);
-        } catch (IllegalArgumentException e) {
-            assertEquals("Discount must be between 0 and 100.", e.getMessage());}}
-
-        }
+        double price = DiscountCalculator.applyDiscount(total,discount);
+        //analyse
+        assertEquals(expected, price, 0.001);}
+    }

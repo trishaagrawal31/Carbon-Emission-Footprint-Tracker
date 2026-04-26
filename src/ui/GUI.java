@@ -38,7 +38,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.io.*;
 import java.net.Socket;
@@ -54,10 +53,9 @@ import ZeroCarbonFootprintTracker.src.util.InputValidator;
 import ZeroCarbonFootprintTracker.src.util.Logger;
 import ZeroCarbonFootprintTracker.src.util.TransactionHandler;
 import ZeroCarbonFootprintTracker.ConnectionConfig;
-import java.net.ConnectException;
 import ZeroCarbonFootprintTracker.ResponseParser;
 
-import ZeroCarbonFootprintTracker.DiscountCalculator;
+
 
 
 
@@ -74,6 +72,7 @@ public class GUI extends Application {
     public static final String STATE_FILE = "./ZeroCarbonFootprintTracker/greenprint_state.txt"; 
     private FootprintTracker tracker = new FootprintTracker("RIT GreenPrint 2026");
     private TransactionHandler transactionHandler = new TransactionHandler(tracker);
+    public static final String IMPACT_FILE = "./ZeroCarbonFootprintTracker/greenprint_impact.txt";
 
     
     private FlowPane dashboardGrid;
@@ -234,14 +233,16 @@ public class GUI extends Application {
         });
         Button buyBtn=makeButton("Purchase Offset", Color.DARKGREEN);
         Label processingLabel=new Label("");
-        processingLabel.setTextFill(Color.BLUE);
+        processingLabel.setTextFill(Color.MAGENTA);
+        
        
         buyBtn.setOnAction(new PurchaseOffsetEvent(buyBtn, processingLabel));
 
         
         receiptArea=new Label("Your receipt will appear here after purchase.");// Receiptdisplay
-        receiptArea.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), Insets.EMPTY)));
+        //receiptArea.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), Insets.EMPTY)));
         receiptArea.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderStroke.THIN)));
+        receiptArea.setPadding(new Insets(25));
 
         Label histHeading=makeHeading("Offset History:");
         offsetHistoryList= new ListView<String>();
@@ -268,14 +269,15 @@ public class GUI extends Application {
     discountErrorLabel.setVisible(false);
     HBox inputRow = new HBox(35,makeRow("Username:", offsetUserField), makeRow("Payment Method:", paymentCombo),makeRow("Impact:", ImpactCombo));
     HBox discountErrorBox = new HBox(10, requestDiscountBtn, discountErrorLabel);
+    HBox buttons = new HBox(10, show_estimate, discountErrorBox);
 
     offsetLayout.getChildren().addAll(offsetHeading,totalEmissionsLabel, inputRow,
-                rateNote,show_estimate,estimate,discountErrorBox, discountResultLabel,buyBtn,processingLabel,
+                rateNote,buttons,estimate, discountResultLabel,buyBtn,processingLabel,
                 new Label("Receipt:"),receiptArea,histHeading,offsetHistoryList
             );
 
         offsetUserField.textProperty().addListener((obs, oldVal, newVal) -> {
-            String user = newVal.trim();
+            String user = newVal.trim().toLowerCase();
             estimate.setText("");
             discountResultLabel.setText("");
             if (userDiscountPctMap.containsKey(user)) {
@@ -328,6 +330,7 @@ public class GUI extends Application {
         Scene scene = new Scene(tabPane,1000,700);
         stage.setTitle("GreenPrint - Carbon Footprint Tracker");
         stage.setScene(scene);
+        stage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("logo.png")));
         stage.show();
 
         refreshDashboard();
@@ -340,7 +343,7 @@ public class GUI extends Application {
      * and refreshes summary metrics.
      * @return void
      */
-    private void refreshDashboard() {
+    public void refreshDashboard() {
         dashboardGrid.getChildren().clear();
         for (EmissionSource e:tracker.getEntries()) dashboardGrid.getChildren().add(buildCard(e));
             updateSummaryBar();
@@ -353,7 +356,7 @@ public class GUI extends Application {
      * @return label node for display in dashboard grid
      */
     
-    private Label buildCard(EmissionSource entry) {
+    public Label buildCard(EmissionSource entry) {
         double val = entry.calculateEmission();
 
         Color bg=val < 1.0 ?Color.GREEN:val<= 3.0?Color.GOLD:Color.TOMATO;
@@ -377,7 +380,7 @@ public class GUI extends Application {
      * Updates the top summary bar with current totals and top contributor.
      * @return void
      */
-    private void updateSummaryBar() { 
+    public void updateSummaryBar() { 
         summaryLabel.setText(
             "Total Entries: "+tracker.getEntries().size()+" |  Total CO2: " +tracker.getTotalEmissions() +" kg  |  Top Emitter: "+ getTopEmitter());
     }
@@ -404,7 +407,7 @@ public class GUI extends Application {
      * @return void
      */
     // always the same pattern: ComboBox (string) then TextField (number)
-    private void updateDynamicFields(String type) {
+    public void updateDynamicFields(String type) {
     
         dynamicFields.getChildren().clear();
         if (type == null) return;
@@ -433,7 +436,7 @@ public class GUI extends Application {
 
 
 
-    private void handleRequestDiscount() {
+    public void handleRequestDiscount() {
         // Get the username typed in the offset username field
         String user = offsetUserField.getText().trim();
  
@@ -469,7 +472,7 @@ public class GUI extends Application {
      * Event handler for adding a new entry to the emission tracker.
      * Performs input validation, model creation, persistence update, and UI refresh.
      */
-    private class AddEntryEvent implements EventHandler<ActionEvent> {
+    public class AddEntryEvent implements EventHandler<ActionEvent> {
         /**
          * Handle click of "Add Entry" button. Validates user input, creates
          * the corresponding EmissionSource, updates state, and refreshes the UI.
@@ -568,7 +571,7 @@ public class GUI extends Application {
     /**
      * Event handler for searching entries by username and displaying matches.
      */
-    private class SearchEvent implements EventHandler<ActionEvent> {
+    public class SearchEvent implements EventHandler<ActionEvent> {
         /**
          * Handle click of "Search" button. Searches entries by username and
          * updates result list with matching entries or no-result message.
@@ -603,7 +606,7 @@ public class GUI extends Application {
     /**
      * Event handler for processing an offset purchase transaction with simulated delay.
      */
-    private class PurchaseOffsetEvent implements EventHandler<ActionEvent> {
+    public class PurchaseOffsetEvent implements EventHandler<ActionEvent> {
         private final Button buyBtn;
         private final Label  processingLabel;
 
@@ -640,7 +643,7 @@ public class GUI extends Application {
             pause.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                String user = offsetUserField.getText().trim();
+                String user = offsetUserField.getText().trim().toLowerCase();
                 String receipt;
 
                 if (userDiscountedValueMap.containsKey(user)) {
@@ -677,6 +680,16 @@ public class GUI extends Application {
                     } catch (IOException ex) {
                         System.err.println("Failed to rewrite state: " + ex.getMessage());
                     }
+                    String impact = ImpactCombo.getValue();
+
+                    //impact file logging
+                    try (BufferedWriter impactWriter = new BufferedWriter(new FileWriter(IMPACT_FILE, true))) {
+                        impactWriter.write(LocalDateTime.now().format(Logger.FORMATTER) + " | " + user + " | " + impact+ " | " + payment);
+                        impactWriter.newLine();
+                    } catch (IOException ex) {
+                        System.err.println("Failed to write impact log: " );
+                    }
+
                     refreshDashboard();
 
                     Logger.log(Logger.Operation.OFFSET_PURCHASED,"User: " + user + " | Payment: " + payment);
@@ -702,7 +715,7 @@ public class GUI extends Application {
      * Loads saved state entries from local file storage into the in-memory tracker.
      * @return void
      */
-    private void loadState() {
+    public void loadState() {
         File file = new File(STATE_FILE);
         if (!file.exists()) return;
 
@@ -731,7 +744,7 @@ public class GUI extends Application {
      * @return Deserialized EmissionSource object, or null if parsing failed
      */
     // p[0]=category  p[1]=id  p[2]=date  p[3]=user  p[4]=stringVal  p[5]=numVal
-    private EmissionSource fromStateLine(String line) {
+    public EmissionSource fromStateLine(String line) {
         try {
             String[] p = line.split("\\|");
             double numVal = Double.parseDouble(p[5]);
@@ -799,29 +812,24 @@ public class GUI extends Application {
                 socket.close();
  
                 // Use ResponseParser to extract discount and discounted value
-                ResponseParser parser = new ResponseParser(response);
+                ResponseParser parser = new ResponseParser(response);//error handling
                 int pct = parser.getDiscountPct();
                 double discounted = parser.getDiscountedValue();
-                
- 
-                final String msg = "Server discount applied: " + pct + "% — "
-                        + userName + "'s adjusted footprint: "
-                        + String.format("%.2f", discounted) + " kg CO2";
-
-                final int finalPct = pct;
-                final double finalDiscounted = discounted;
+            
  
                 Platform.runLater(() -> {
-    // Save to maps
-    userDiscountPctMap.put(userName, finalPct);
-    userDiscountedValueMap.put(userName, finalDiscounted);
+        // Save to maps
+                    userDiscountPctMap.put(userName.toLowerCase(), pct);
+                    userDiscountedValueMap.put(userName.toLowerCase(), discounted);
+                    
 
-    discountResultLabel.setText("Server discount applied: " + finalPct + "% — " 
-        + userName + "'s adjusted footprint: " + String.format("%.2f", finalDiscounted) + " kg CO2");
-    
-    // Log according to Task 1 requirements
-    Logger.log(Logger.Operation.DISCOUNT_REQUESTED, "User: " + userName + " | Pct: " + finalPct);
-});            } catch (SocketTimeoutException e) {
+                    discountResultLabel.setText("Server discount applied: " + pct + "% — " 
+                        + userName + "'s adjusted footprint: " + String.format("%.2f", discounted) + " kg CO2");
+                    
+                    // Log according to Task 1 requirements
+                    Logger.log(Logger.Operation.DISCOUNT_REQUESTED, "User: " + userName + " | Pct: " + pct);
+                });            
+            } catch (SocketTimeoutException e) {
                 Platform.runLater(new Runnable() {
                     public void run() {
                         discountErrorLabel.setText("Connection timed out. Please try again later.");
@@ -843,12 +851,12 @@ public class GUI extends Application {
                     }
                 });
             }
-            
+                
  
             // Always re-enable the button so user can click again
             Platform.runLater(new Runnable() {
                 public void run() {
-                    requestDiscountBtn.setDisable(false);
+                    requestDiscountBtn.setDisable(true);
                     requestDiscountBtn.setText("Request Discount");
                 }
             });
@@ -887,7 +895,7 @@ public class GUI extends Application {
         return scroll;
     }
 
-    private void refreshLeaderboard() {
+    public void refreshLeaderboard() {
             leaderboardBox.getChildren().clear();
 
             // Group by user

@@ -28,7 +28,7 @@ public class TransactionHandler {
     public String CalculateOffSet(String userName, String paymentMethod){
         double userEmissions= offsetTracker.getTotalEmissionsForUser(userName);
 
-        if (userEmissions<= 0){
+        if (userEmissions< 0){
             return "No emissions found for user \""+ userName +"\".\n"+"Please add emission entries first.";
         }
         double totalCost=userEmissions*OFFSET_RATE;

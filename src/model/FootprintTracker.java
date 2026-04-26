@@ -77,7 +77,7 @@ public class FootprintTracker {
         for (EmissionSource entry : entries) {
             total += entry.calculateEmission();
         }
-        return total;
+        return Double.parseDouble(String.format("%.2f", total));
     }
 
     /**
