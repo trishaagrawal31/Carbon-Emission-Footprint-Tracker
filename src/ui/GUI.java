@@ -241,7 +241,6 @@ public class GUI extends Application {
 
         
         receiptArea=new Label("Your receipt will appear here after purchase.");// Receiptdisplay
-        //receiptArea.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), Insets.EMPTY)));
         receiptArea.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderStroke.THIN)));
         receiptArea.setPadding(new Insets(25));
 
@@ -282,7 +281,7 @@ public class GUI extends Application {
             estimate.setText("");
             discountResultLabel.setText("");
             if (userDiscountPctMap.containsKey(user)) {
-                // They have a saved discount! Show it.
+                // They have a saved discount
                 int pct = userDiscountPctMap.get(user);
                 double val = userDiscountedValueMap.get(user);
                 discountResultLabel.setText("Saved discount: " + pct + "% (Adjusted: " + String.format("%.2f", val) + " kg)");
@@ -290,7 +289,7 @@ public class GUI extends Application {
             } else {
                 // No discount for this name yet.
                 discountResultLabel.setText("");
-                // Re-enable button if there are entries (Assignment requirement)
+                // Re-enable button if there are entries
                 requestDiscountBtn.setDisable(tracker.getEntries().isEmpty());
             }
         });
@@ -311,7 +310,7 @@ public class GUI extends Application {
         offsetTab.setClosable(false);
         dashTab.setContent(dashLayout);
         inputTab.setContent(inputLayout);
-
+        //TAB 4: Leaderboard
         Tab leaderboardTab = new Tab("Leaderboard");
         leaderboardTab.setClosable(false);
         leaderboardTab.setContent(buildLeaderboardTab());
@@ -440,7 +439,7 @@ public class GUI extends Application {
             return;
         }
  
-        // Get THIS user's emissions only — not the grand total
+        
         double userEmission = tracker.getTotalEmissionsForUser(user);
  
         if (userEmission <= 0) {
@@ -454,11 +453,9 @@ public class GUI extends Application {
         discountResultLabel.setText("");
         discountErrorLabel.setVisible(false);
         requestDiscountBtn.setDisable(true);
-        requestDiscountBtn.setText("Requesting...");
  
         // Start background thread to request discount from server
         DiscountThread t = new DiscountThread(user, userEmission);
-        t.setDaemon(true);
         t.start();
     }
     /**
@@ -810,7 +807,7 @@ public class GUI extends Application {
                 socket.close();
  
                 // Use ResponseParser to extract discount and discounted value
-                ResponseParser parser = new ResponseParser(response);//error handling
+                ResponseParser parser = new ResponseParser(response);
                 int pct = parser.getDiscountPct();
                 double discounted = parser.getDiscountedValue();
 
